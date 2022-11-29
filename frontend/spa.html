@@ -45,10 +45,10 @@
                 <input type="text" id="fname" class="category-input" name="fname" /><br />
                 <label for="lname">Last Name:</label><br />
                 <input type="text" id="lname" class="category-input" name="lname" /><br />
-                <label for="username">Username:</label><br />
-                <input type="text" id="register-username" class="category-input" name="username" /><br />
                 <label for="email">Email:</label><br />
                 <input type="email" id="email" class="category-input" name="email" /><br />
+                <label for="username">Username:</label><br />
+                <input type="text" id="register-username" class="category-input" name="username" /><br />
                 <div class="age-gender">
                     <div class="age">
                         <label for="age">Age:</label><br />
@@ -76,9 +76,9 @@
         <div class="signin">
             <!-- <form> -->
             <label for="username">Email or Username:</label>
-            <input type="text" class="signin-input" id="username" class="category-input" name="username" /><br>
+            <input type="text" class="signin-input" id="email-username" class="category-input" name="username" /><br>
             <label for="password">Password:</label>
-            <input type="password" class="signin-input" id="password" class="category-input" name="password" /><br>
+            <input type="password" class="signin-input" id="signin-password" class="category-input" name="password" /><br>
             <button class="signin-btn">SIGN IN <img src="assets/arrow-right.svg" alt="" class="src"></button>
             <div class="not-signedup">Don’t have an account? <span class="sign-up-link">Sign Up!</span></div>
             <!-- </form> -->
@@ -131,7 +131,7 @@
                 <div class="create-title">
                     <input id="create-post-title" type="text" placeholder="Title..." />
                 </div>
-                <textarea placeholder="Start typing..." name="body" rows="4" cols="50"></textarea>
+                <textarea id="create-post-body" placeholder="Start typing..." name="body" rows="4" cols="50"></textarea>
                 <select name="categories" id="create-post-categories">
                     <option value="go">Go</option>
                     <option value="javascript">Javascript</option>
