@@ -1,0 +1,50 @@
+.register-wrapper {
+
+    display: none;
+    justify-content: center; 
+    margin-top: 50px;
+
+}
+
+.register {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+
+}
+
+label {
+    color:rgb(90, 90, 90);
+    font-weight: light;
+    font-size: 0.8em;
+}
+
+.category-input {
+    width: 100%;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    padding: 10px;
+}
+
+.age-gender {
+    display: flex;
+    justify-content: space-between;
+}
+
+.age {
+    width: 48%;
+}
+.gender {
+    width: 48%;
+}
+
+.register-btn {
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+
+}

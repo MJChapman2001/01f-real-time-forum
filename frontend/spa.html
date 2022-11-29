@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;700&family=Poppins:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="styles/styles.css" />
+    <link rel="stylesheet" href="styles/createpost.css" />
+    <link rel="stylesheet" href="styles/signin.css" />
+    <link rel="stylesheet" href="styles/register.css" />
+
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="logout-nav">
+        <div class="logo">Forum.com</div>
+        <div class="nav-right">
+            <div class="profile">profile</div>
+            <button class="logout-btn">
+                <img src="assets/signout.svg" alt="" class="src">
+            </button>
+        </div>
+    </div>
+    <div class="signup-nav">
+        <div class="logo">Forum.com</div>
+        <div class="nav-right">
+            <button class="signup-btn">
+                SIGN UP
+            </button>
+        </div>
+    </div>
+    <!-- register -->
+    <div class="register-wrapper">
+        <div class="register">
+            <form>
+                <label for="fname">First Name:</label><br />
+                <input type="text" id="fname" class="category-input" name="fname" /><br />
+                <label for="lname">Last Name:</label><br />
+                <input type="text" id="lname" class="category-input" name="lname" /><br />
+                <label for="username">Username:</label><br />
+                <input type="text" id="register-username" class="category-input" name="username" /><br />
+                <label for="email">Email:</label><br />
+                <input type="email" id="email" class="category-input" name="email" /><br />
+                <div class="age-gender">
+                    <div class="age">
+                        <label for="age">Age:</label><br />
+                        <input type="number" id="age" class="category-input" name="age" /><br />
+                    </div>
+                    <div class="gender">
+                        <label for="gender">Gender:</label><br />
+                        <select name="gender" id="gender" class="category-input">
+                            <option value="0"></option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label for="password">Password:</label><br />
+                <input type="password" id="register-password" class="category-input" name="password" /><br /><br />
+                <!-- <input type="button" onclick="return false" value="submit"> -->
+                <button class="register-btn">Register</button>
+            </form>
+        </div>
+    </div>
+    <div class="signin-container">
+        <div class="signin">
+            <!-- <form> -->
+            <label for="username">Email or Username:</label>
+            <input type="text" class="signin-input" id="username" class="category-input" name="username" /><br>
+            <label for="password">Password:</label>
+            <input type="password" class="signin-input" id="password" class="category-input" name="password" /><br>
+            <button class="signin-btn">SIGN IN <img src="assets/arrow-right.svg" alt="" class="src"></button>
+            <div class="not-signedup">Don’t have an account? <span class="sign-up-link">Sign Up!</span></div>
+            <!-- </form> -->
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <!-- mid section -->
+        <div class="mid-section">
+            <!-- main page -->
+            <!-- top panel -->
+            <div class="left-panel">
+                <div class="filter-categories">
+                    <select name="categories" id="categories">
+                        <option value="0">Categories</option>
+                        <option value="one">One</option>
+                        <option value="two">Two</option>
+                        <option value="three">Three</option>
+                    </select>
+                </div>
+                <button type="button" class="new-post-btn">
+                    <img src="assets/pluscircle.svg">
+                </button>
+            </div>
+            <div class="posts-wrapper">
+                <div class="post">
+                    <div class="title">
+                        <h3>This is a title</h3>
+                    </div>
+                    <div class="author">
+                        <span><img src="assets/profile1.svg" alt="profile-pic"></span>
+                        Maddie
+                        <span class="date">22</span>
+                    </div>
+                    <div class="post-body">
+                        Nulla aenean id tortor massa ante. Arcu massa felis, nibh nunc
+                        fames vel nunc. Nulla aenean id tortor massa ante. Arcu massa
+                        felis, nibh nunc fames vel nunc.
+                    </div>
+                    <div class="comments">comments</div>
+                </div>
+                <div class="post"></div>
+                <div class="post"></div>
+                <div class="post"></div>
+                <div class="post"></div>
+                <div class="post"></div>
+            </div>
+            <!-- create post -->
+            <div class="create-post-wrapper">
+                <div class="create-title">
+                    <input id="create-post-title" type="text" placeholder="Title..." />
+                </div>
+                <textarea placeholder="Start typing..." name="body" rows="4" cols="50"></textarea>
+                <select name="categories" id="create-post-categories">
+                    <option value="go">Go</option>
+                    <option value="javascript">Javascript</option>
+                    <option value="rust">Rust</option>
+                </select>
+                <button class="create-post-btn">
+                    <h4>Create Post</h4>
+                </button>
+            </div>
+            <!-- post page -->
+            <div class="post-container">
+                <div class="post-wrapper">
+                    <h4>Title of Post</h4>
+                    <br />
+                    <p>
+                        Cupcake ipsum dolor sit amet. Candy bonbon fruitcake danish
+                        pudding tart carrot cake. Sweet pudding powder gummies gummi
+                        bears tart croissant chocolate cake chupa chups. Tootsie roll
+                        powder cheesecake candy sesame snaps carrot cake jelly-o
+                        tiramisu cupcake. Cake chupa chups jelly beans cotton candy
+                        marzipan I love. Wafer tart jelly-o sesame snaps cake. Cupcake
+                        danish dragée croissant fruitcake I love macaroon. Candy canes
+                        toffee bonbon pie carrot cake biscuit gingerbread. Sweet roll
+                        jelly beans muffin jelly-o gummies. Marshmallow chocolate cake
+                        brownie tiramisu gummies.
+                    </p>
+                </div>
+
+                <div class="send-comment">
+                    <input type="text" id="write-comment" placeholder="Write comment" />
+                    <button class="send-comment-btn">
+                        <img src="assets/send-icon.svg" />
+                    </button>
+                </div>
+                <div class="post-comment">
+                    Tootsie roll powder cheesecake candy sesame snaps carrot cake
+                    jelly-o tiramisu cupcake.
+                </div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="users">
+
+                <div class="user">
+                    <img src="assets/profile1.svg" />
+                    <p>username</p>
+                </div>
+                <div class="user">
+                    <img src="assets/profile1.svg" />
+                    <p>username</p>
+                </div>
+                <div class="user">
+                    <img src="assets/profile1.svg" />
+                    <p>username</p>
+                </div>
+                <div class="user">
+                    <img src="assets/profile1.svg" />
+                    <p>username</p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <script src="index.js"></script>
+</body>
+
+</html>
