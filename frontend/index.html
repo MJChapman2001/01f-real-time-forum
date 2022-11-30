@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="./frontend/styles/createpost.css" />
     <link rel="stylesheet" href="./frontend/styles/signin.css" />
     <link rel="stylesheet" href="./frontend/styles/register.css" />
+    <link rel="stylesheet" href="./frontend/styles/chat.css" />
 
     <title>Document</title>
 </head>
@@ -78,7 +79,8 @@
             <label for="username">Email or Username:</label>
             <input type="text" class="signin-input" id="email-username" class="category-input" name="username" /><br>
             <label for="password">Password:</label>
-            <input type="password" class="signin-input" id="signin-password" class="category-input" name="password" /><br>
+            <input type="password" class="signin-input" id="signin-password" class="category-input"
+                name="password" /><br>
             <button class="signin-btn">SIGN IN <img src="./frontend/assets/arrow-right.svg" alt="" class="src"></button>
             <div class="not-signedup">Don’t have an account? <span class="sign-up-link">Sign Up!</span></div>
             <!-- </form> -->
@@ -171,6 +173,44 @@
                     jelly-o tiramisu cupcake.
                 </div>
             </div>
+            <!-- chat -->
+            <div class="chat-wrapper">
+                <div class="chat-username-wrapper">
+                    <div class="chat-user">
+                        <img src="./frontend/assets/profile1.svg" />
+                        <p>username</p>
+                    </div>
+                    <div class="close-chat">X</div>
+                </div>
+                <div class="chat">
+                    <div class="sender-container">
+                        <div class="sender">
+                            <div class="sender-username">Maddie</div>
+                            <div class="chat-msg">Curab</div>
+                            <div class="chat-time">11:59</div>
+                        </div>
+                    </div>
+                    <div class="receiver-container">
+                        <div class="receiver">
+                            <div class="sender-username">Klaudia</div>
+
+                            Curabitur risus magna
+                            <div class="chat-time">11:59</div>
+                        </div>
+                    </div>
+                    <div class="chat-date-wrapper">
+                        <div class="chat-date">
+                            22 November 2022
+                        </div>
+                    </div>
+                </div>
+                <div class="send-wrapper">
+                    <input type="text" id="chat-input" placeholder="Start typing...">
+                    <button id="send-btn">
+                        <img src="./frontend/assets/send-icon.svg">
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="right-panel">
             <div class="users">
@@ -197,6 +237,7 @@
 
     </div>
     <script src="./frontend/index.js"></script>
+    <script src="./frontend/chat.js"></script>
 </body>
 
 </html>
