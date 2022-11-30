@@ -9,6 +9,9 @@ import (
 func StartServer() {
 	mux := http.NewServeMux()
 
+	mux.Handle("/frontend/", http.StripPrefix("/frontend/", http.FileServer(http.Dir("./frontend"))))
+
+	mux.HandleFunc("/", HomeHandler)
 	mux.HandleFunc("/login", LoginHandler)
 	mux.HandleFunc("/logout", LogoutHandler)
 	mux.HandleFunc("/register", RegisterHandler)

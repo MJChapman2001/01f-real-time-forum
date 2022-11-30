@@ -18,8 +18,8 @@ document.querySelector('.signin-btn').addEventListener("click", function() {
         password: signinPassword
     }
     console.log("login: ", data)
-   signinContainer.style.display = "none"
-   signupNav.style.display = "none"
+    signinContainer.style.display = "none"
+    signupNav.style.display = "none"
     contentWrapper.style.display = "flex"  
     logoutNav.style.display = "flex"
 })

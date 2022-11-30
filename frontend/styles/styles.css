@@ -291,7 +291,7 @@ label {
     width: 65%;
     margin-left: 100px;
     margin-top: 30px;
-    display:flex;
+    display: none;
     flex-direction: column;
     align-items: flex-end;
     gap: 10px;
