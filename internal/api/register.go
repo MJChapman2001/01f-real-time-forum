@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"real-time-forum/internal/config"
@@ -35,6 +36,8 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println(newUser)
+
 	//Generate the password hash for the user
 	passwordHash, err := GenerateHash(newUser.Password)
 	if err != nil {
@@ -47,9 +50,22 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	//Attempts to add the new user to the database
 	err = database.NewUser(config.Path, newUser)
 	if err != nil {
+		fmt.Println(err)
 		http.Error(w, "500 internal server error.", http.StatusInternalServerError)
 		return
 	}
+
+	//Sends a message back if successfully registered
+	var msg = models.Resp{Msg: "Successful registration"}
+	
+	resp, err := json.Marshal(msg)
+	if err != nil {
+		http.Error(w, "500 internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(resp)
 }
 
 //Generates a hash from a given password

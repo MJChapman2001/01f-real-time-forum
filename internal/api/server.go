@@ -3,10 +3,15 @@ package api
 import (
 	"log"
 	"net/http"
+	
+	"real-time-forum/internal/config"
+	"real-time-forum/internal/database"
 )
 
 //Sets up the router with endpoints and starts the server
 func StartServer() {
+	database.InitDB(config.Path)
+
 	mux := http.NewServeMux()
 
 	mux.Handle("/frontend/", http.StripPrefix("/frontend/", http.FileServer(http.Dir("./frontend"))))

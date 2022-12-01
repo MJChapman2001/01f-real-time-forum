@@ -7,6 +7,27 @@ const signinContainer = document.querySelector('.signin-container');
 const signupNav = document.querySelector('.signup-nav');
 const logoutNav = document.querySelector('.logout-nav');
 
+//POST fetch function
+async function postData(url = '', data = {}) {
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+
+    return response.json()
+}
+
+//GET fetch function
+async function getData(url = '') {
+    const response = await fetch(url, {
+        method: 'GET'
+    })
+
+    return response.json()
+}
 
 //sign in
 document.querySelector('.signin-btn').addEventListener("click", function() {
@@ -81,18 +102,22 @@ document.querySelector(".register-btn").addEventListener("click", function(e) {
     const password = document.querySelector("#register-password").value
 
     let data = {
-        fname: fname,
-        lname: lname,
-        email: email,
+        id: 0,
         username: username,
-        age: age,
+        firstname: fname,
+        surname: lname,
         gender: gender,
+        email: email,
+        dob: age,
         password: password
     }
-    console.log("register:", data)
 
-    registerWrapper.style.display = "none"
-    contentWrapper.style.display = "flex"  
+    let resp = postData('http://localhost:8000/register', data)
+
+    console.log(resp)
+
+    // registerWrapper.style.display = "none"
+    // contentWrapper.style.display = "flex"  
 })
 
 
