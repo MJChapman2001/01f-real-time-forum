@@ -93,6 +93,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			HttpOnly: true,
 			Path: "/",
 			MaxAge: config.CookieAge,
+			SameSite: http.SameSiteNoneMode,
 		}
 		http.SetCookie(w, cookie)
 	}
@@ -103,4 +104,16 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "500 internal server error.", http.StatusInternalServerError)
 		return
 	}
+
+	//Sends a message back if successfully logged in
+	var msg = models.Resp{Msg: "Welcome "+foundUser.Username}
+	
+	resp, err := json.Marshal(msg)
+	if err != nil {
+		http.Error(w, "500 internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(resp)
 }

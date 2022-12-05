@@ -29,6 +29,25 @@ async function getData(url = '') {
     return response.json()
 }
 
+window.addEventListener('DOMContentLoaded', function() {
+    var msg
+    let resp = postData('http://localhost:8000/session')
+    resp.then(value => {
+        msg = value.msg
+        console.log(msg)
+
+        signinContainer.style.display = "none"
+        signupNav.style.display = "none"
+        contentWrapper.style.display = "flex"  
+        logoutNav.style.display = "flex"
+    }).catch(() => {
+        signinContainer.style.display = "flex"
+        signupNav.style.display = "flex"
+        contentWrapper.style.display = "none"  
+        logoutNav.style.display = "none"
+    })
+})
+
 //sign in
 document.querySelector('.signin-btn').addEventListener("click", function() {
     // e.preventDefault()
@@ -38,11 +57,18 @@ document.querySelector('.signin-btn').addEventListener("click", function() {
         emailUsername: emailUsername,
         password: signinPassword
     }
-    console.log("login: ", data)
-    signinContainer.style.display = "none"
-    signupNav.style.display = "none"
-    contentWrapper.style.display = "flex"  
-    logoutNav.style.display = "flex"
+
+    var msg
+    let resp = postData('http://localhost:8000/login', data)
+    resp.then(value => {
+        msg = value.msg
+        console.log(msg)
+
+        signinContainer.style.display = "none"
+        signupNav.style.display = "none"
+        contentWrapper.style.display = "flex"  
+        logoutNav.style.display = "flex"
+    })
 })
 
 
@@ -112,12 +138,15 @@ document.querySelector(".register-btn").addEventListener("click", function(e) {
         password: password
     }
 
+    var msg
     let resp = postData('http://localhost:8000/register', data)
+    resp.then(value => {
+        msg = value.msg
+        console.log(msg)
 
-    console.log(resp)
-
-    // registerWrapper.style.display = "none"
-    // contentWrapper.style.display = "flex"  
+        registerWrapper.style.display = "none"
+        signinContainer.style.display = "flex"
+    })
 })
 
 

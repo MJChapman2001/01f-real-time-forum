@@ -17,6 +17,7 @@ func StartServer() {
 	mux.Handle("/frontend/", http.StripPrefix("/frontend/", http.FileServer(http.Dir("./frontend"))))
 
 	mux.HandleFunc("/", HomeHandler)
+	mux.HandleFunc("/session", SessionHandler)
 	mux.HandleFunc("/login", LoginHandler)
 	mux.HandleFunc("/logout", LogoutHandler)
 	mux.HandleFunc("/register", RegisterHandler)
