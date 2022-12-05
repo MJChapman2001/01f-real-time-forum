@@ -70,12 +70,36 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		cookie, err := r.Cookie("session")
+		if err != nil {
+			return
+		}
+
+		foundVal := cookie.Value
+
+		curr, err := database.CurrentUser(config.Path, foundVal)
+		if err != nil {
+			return
+		}
+
 		//Attemps to add the new post to the database
-		err = database.NewPost(config.Path, newPost)
+		err = database.NewPost(config.Path, newPost, curr)
 		if err != nil {
 			http.Error(w, "500 internal server error", http.StatusInternalServerError)
 			return
 		}
+
+		//Sends a message back if successfully posted
+		var msg = models.Resp{Msg: "New post added"}
+		
+		resp, err := json.Marshal(msg)
+		if err != nil {
+			http.Error(w, "500 internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write(resp)
 	default:
 		//Prevents the use of other request types
 		http.Error(w, "405 method not allowed", http.StatusMethodNotAllowed)

@@ -109,13 +109,25 @@ document.querySelector(".create-post-btn").addEventListener("click", function() 
     const body = document.querySelector("#create-post-body").value
     const category = document.querySelector("#create-post-categories").value
     let data = {
+        id: 0,
+        user_id: 0,
+        category: category,
         title: title,
-        body: body,
-        category: category
+        content: body,
+        date: '',
+        likes: 0,
+        dislikes: 0
     }
-    console.log("create post:", data)
-    createPost.style.display = "none"
-    postsWrapper.style.display = "flex"
+    
+    var msg
+    let resp = postData('http://localhost:8000/post', data)
+    resp.then(value => {
+        msg = value.msg
+        console.log(msg)
+
+        createPost.style.display = "none"
+        postsWrapper.style.display = "flex"
+    })
 })
 
 // click on post
