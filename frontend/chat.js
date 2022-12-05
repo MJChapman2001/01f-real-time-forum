@@ -10,6 +10,7 @@ let data = [{
 
 // open chat when click on user
 document.querySelector(".user").addEventListener("click", function() {
+    // document.querySelector(".user").style.fontWeight = "900"
     document.querySelector(".chat-wrapper").style.display = "flex"
     var conn;
     var msg = document.getElementById("chat-input");
@@ -92,5 +93,6 @@ document.querySelector(".user").addEventListener("click", function() {
 // close chat
 document.querySelector(".close-chat").addEventListener("click", function() {
     document.querySelector(".chat-wrapper").style.display = "none"
+    // document.querySelector(".user").style.fontWeight = "400"
 
 })

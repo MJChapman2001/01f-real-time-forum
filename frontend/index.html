@@ -24,9 +24,9 @@
     <div class="logout-nav">
         <div class="logo">Forum.com</div>
         <div class="nav-right">
-            <div class="profile">profile</div>
+            <div class="profile">maddiewesst</div>
             <button class="logout-btn">
-                <img src="./frontend/assets/signout.svg" alt="" class="src">
+                <img src="./frontend/assets/signout3.svg" alt="" class="src">
             </button>
         </div>
     </div>
@@ -39,40 +39,67 @@
         </div>
     </div>
     <!-- register -->
-    <div class="register-wrapper">
+    <div class="register-container">
         <div class="register">
             <form>
-                <label for="fname">First Name:</label><br />
-                <input type="text" id="fname" class="category-input" name="fname" /><br />
-                <label for="lname">Last Name:</label><br />
-                <input type="text" id="lname" class="category-input" name="lname" /><br />
-                <label for="email">Email:</label><br />
-                <input type="email" id="email" class="category-input" name="email" /><br />
-                <label for="username">Username:</label><br />
-                <input type="text" id="register-username" class="category-input" name="username" /><br />
-                <div class="age-gender">
-                    <div class="age">
-                        <label for="age">Age:</label><br />
-                        <input type="number" id="age" class="category-input" name="age" /><br />
+                <div class="split-input">
+                    <div class="register-wrapper">
+                        <div class="register-label">
+                            <label for="fname">Firstname</label>
+                        </div>
+                        <input type="text" id="fname" class="register-input" name="fname" />
                     </div>
-                    <div class="gender">
-                        <label for="gender">Gender:</label><br />
-                        <select name="gender" id="gender" class="category-input">
-                            <option value="0"></option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                        </select>
+                    <div class="register-wrapper">
+                        <div class="register-label">
+                            <label for="lname">Surname</label>
+                        </div>
+                        <input type="text" id="lname" class="register-input" name="lname" />
                     </div>
                 </div>
+                <div class="register-wrapper">
+                    <div class="register-label">
+                        <label for="email">Email</label>
+                    </div>
 
-                <label for="password">Password:</label><br />
-                <input type="password" id="register-password" class="category-input" name="password" /><br /><br />
-                <!-- <input type="button" onclick="return false" value="submit"> -->
-                <button class="register-btn">Register</button>
+                    <input type="email" id="email" class="register-input" name="email" />
+                </div>
+                <div class="register-wrapper">
+                    <div class="register-label">
+                        <label for="username">Username</label>
+                    </div>
+
+                    <input type="text" id="register-username" class="register-input" name="username" />
+                </div>
+
+                <div class="split-input">
+                    <div class="register-wrapper" id="register-wrapper-age">
+                        <div class="register-label">
+                            <label for="age">DOB</label>
+                        </div>
+                        <input type="date" id="age" class="register-input" name="age" />
+                    </div>
+                    <div class="register-wrapper" id="register-wrapper-gender">
+                        <div class="register-label">
+                            <label for="gender">Gender</label>
+                        </div>
+                        <input type="text" id="gender" class="register-input" name="gender">
+                    </div>
+                </div>
+                <div class="register-wrapper">
+                    <div class="register-label">
+                        <label for="password">Password</label>
+                    </div>
+
+                    <input type="password" id="register-password" class="register-input" name="password" />
+                    <!-- <input type="button" onclick="return false" value="submit"> -->
+                </div>
+                <button class="register-btn">Create Account</button>
+                <div class="signedup">Already have an account? <span id="signin-link" class="link">Sign In</span></div>
+
             </form>
         </div>
     </div>
+    <!-- sign in -->
     <div class="signin-container">
         <div class="signin">
             <!-- <form> -->
@@ -82,7 +109,7 @@
             <input type="password" class="signin-input" id="signin-password" class="category-input"
                 name="password" /><br>
             <button class="signin-btn">SIGN IN <img src="./frontend/assets/arrow-right.svg" alt="" class="src"></button>
-            <div class="not-signedup">Don’t have an account? <span class="sign-up-link">Sign Up!</span></div>
+            <div class="not-signedup">Don’t have an account? <span id="signup-link" class="link">Sign Up!</span></div>
             <!-- </form> -->
         </div>
     </div>
@@ -90,9 +117,8 @@
     <div class="content-wrapper">
         <!-- mid section -->
         <div class="mid-section">
-            <!-- main page -->
             <!-- top panel -->
-            <div class="left-panel">
+            <div class="top-panel">
                 <div class="filter-categories">
                     <select name="categories" id="categories">
                         <option value="0">Categories</option>
@@ -105,22 +131,39 @@
                     <img src="./frontend/assets/pluscircle.svg">
                 </button>
             </div>
+            <!-- main page -->
             <div class="posts-wrapper">
                 <div class="post">
-                    <div class="title">
-                        <h3>This is a title</h3>
-                    </div>
+                    <div class="title">This is a title</div>
                     <div class="author">
-                        <span><img src="./frontend/assets/profile1.svg" alt="profile-pic"></span>
-                        Maddie
-                        <span class="date">22</span>
+                        <img src="./frontend/assets/profile1.svg" alt="profile-pic">
+                        <div class="column-wrapper">
+                            <div class="post-username">maddiewesst</div>
+                            <div class="date">22 March 2022</div>
+                        </div>
+
                     </div>
                     <div class="post-body">
                         Nulla aenean id tortor massa ante. Arcu massa felis, nibh nunc
                         fames vel nunc. Nulla aenean id tortor massa ante. Arcu massa
                         felis, nibh nunc fames vel nunc.
                     </div>
-                    <div class="comments">comments</div>
+                    <div class="comments-wrapper">
+                        <div class="likes-dislikes-wrapper">
+                            <div class="likes-wrapper">
+                                <img src="./frontend/assets/like3.svg" alt="" class="src">
+                                <div class="likes">2</div>
+                            </div>
+                            <div class="likes-wrapper">
+                                <img src="./frontend/assets/dislike4.svg" alt="" class="src">
+                                <div class="dislike">0</div>
+                            </div>
+                        </div>
+                        <div class="comments">
+                            <img src="./frontend/assets/comment.svg" alt="">
+                            <div class="comment">3 comments</div>
+                        </div>
+                    </div>
                 </div>
                 <div class="post"></div>
                 <div class="post"></div>
@@ -146,41 +189,60 @@
             <!-- post page -->
             <div class="post-container">
                 <div class="post-wrapper">
-                    <h4>Title of Post</h4>
-                    <br />
-                    <p>
-                        Cupcake ipsum dolor sit amet. Candy bonbon fruitcake danish
-                        pudding tart carrot cake. Sweet pudding powder gummies gummi
-                        bears tart croissant chocolate cake chupa chups. Tootsie roll
-                        powder cheesecake candy sesame snaps carrot cake jelly-o
-                        tiramisu cupcake. Cake chupa chups jelly beans cotton candy
-                        marzipan I love. Wafer tart jelly-o sesame snaps cake. Cupcake
-                        danish dragée croissant fruitcake I love macaroon. Candy canes
-                        toffee bonbon pie carrot cake biscuit gingerbread. Sweet roll
-                        jelly beans muffin jelly-o gummies. Marshmallow chocolate cake
-                        brownie tiramisu gummies.
-                    </p>
+                    <div class="title">This is a title</div>
+                    <div class="author">
+                        <img src="./frontend/assets/profile1.svg" alt="profile-pic">
+                        <div class="post-username">maddiewesst</div>
+                        <div class="dot">•</div>
+                        <div class="date">22 November 2022</div>
+                    </div>
+                    <div class="full-post-body">
+                        Nulla aenean id tortor massa ante. Arcu massa felis, nibh nunc
+                        fames vel nunc. Nulla aenean id tortor massa ante. Arcu massa
+                        felis, nibh nunc fames vel nunc.
+                    </div>
+                    <div class="comments-wrapper">
+                        <div class="likes-dislikes-wrapper">
+                            <div class="likes-wrapper">
+                                <img src="./frontend/assets/like3.svg" alt="" class="src">
+                                <div class="likes">2</div>
+                            </div>
+                            <div class="likes-wrapper">
+                                <img src="./frontend/assets/dislike4.svg" alt="" class="src">
+                                <div class="dislike">0</div>
+                            </div>
+                        </div>
+                        <div class="comments">
+                            <img src="./frontend/assets/comment.svg" alt="">
+                            <div class="comment">3 comments</div>
+                        </div>
+                    </div>
                 </div>
-
+                <!-- comments -->
                 <div class="send-comment">
-                    <input type="text" id="write-comment" placeholder="Write comment" />
+                    <input type="text" id="comment-input" placeholder="Write comment" />
                     <button class="send-comment-btn">
-                        <img src="./frontend/assets/send-icon.svg" />
+                        <img src="./frontend/assets/send5.svg" />
                     </button>
                 </div>
-                <div class="post-comment">
-                    Tootsie roll powder cheesecake candy sesame snaps carrot cake
-                    jelly-o tiramisu cupcake.
+                <div class="comment-wrapper">
+                    <img src="./frontend/assets/profile1.svg" alt="" class="src">
+                    <div class="comment">
+                        <div class="comment-username">username</div>
+                        Nulla aenean id tortor massa ante. Arcu massa
+                        felis, nibh nunc fames vel nunc.
+                        felis, nibh nunc fames vel nunc.
+                    </div>
                 </div>
             </div>
             <!-- chat -->
             <div class="chat-wrapper">
                 <div class="chat-username-wrapper">
                     <div class="chat-user">
-                        <img src="./frontend/assets/profile1.svg" />
+                        <img src="./frontend/assets/profile4.svg" />
                         <p>username</p>
                     </div>
-                    <div class="close-chat">X</div>
+                    <div class="close-chat link">X</div>
                 </div>
                 <div class="chat">
                     <div class="sender-container">
@@ -207,28 +269,29 @@
                 <div class="send-wrapper">
                     <input type="text" id="chat-input" placeholder="Start typing...">
                     <button id="send-btn">
-                        <img src="./frontend/assets/send-icon.svg">
+                        <img src="./frontend/assets/send.svg">
                     </button>
                 </div>
             </div>
         </div>
+        <!--  right panel -->
         <div class="right-panel">
             <div class="users">
 
                 <div class="user">
-                    <img src="./frontend/assets/profile1.svg" />
+                    <img src="./frontend/assets/profile4.svg" />
                     <p>username</p>
                 </div>
                 <div class="user">
-                    <img src="./frontend/assets/profile1.svg" />
+                    <img src="./frontend/assets/profile4.svg" />
                     <p>username</p>
                 </div>
                 <div class="user">
-                    <img src="./frontend/assets/profile1.svg" />
+                    <img src="./frontend/assets/profile4.svg" />
                     <p>username</p>
                 </div>
                 <div class="user">
-                    <img src="./frontend/assets/profile1.svg" />
+                    <img src="./frontend/assets/profile4.svg" />
                     <p>username</p>
                 </div>
 
