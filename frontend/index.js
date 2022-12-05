@@ -64,6 +64,9 @@ document.querySelector('.signin-btn').addEventListener("click", function() {
         msg = value.msg
         console.log(msg)
 
+        document.querySelector('#email-username').value = ""
+        document.querySelector('#signin-password').value = ""
+
         signinContainer.style.display = "none"
         signupNav.style.display = "none"
         contentWrapper.style.display = "flex"  
@@ -71,6 +74,20 @@ document.querySelector('.signin-btn').addEventListener("click", function() {
     })
 })
 
+//sign out
+document.querySelector('.logout-btn').addEventListener("click", function() {
+    var msg
+    let resp = postData('http://localhost:8000/logout')
+    resp.then(value => {
+        msg = value.msg
+        console.log(msg)
+
+        signinContainer.style.display = "flex"
+        signupNav.style.display = "flex"
+        contentWrapper.style.display = "none"  
+        logoutNav.style.display = "none"
+    })
+})
 
 // sign up
 document.querySelector('.signup-btn').addEventListener("click", function() {

@@ -1,10 +1,12 @@
 package api
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"real-time-forum/internal/config"
 	"real-time-forum/internal/database"
+	"real-time-forum/internal/models"
 )
 
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
@@ -32,7 +34,6 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	//Checks for session cookie
 	cookie, err := r.Cookie("session")
 	if err != nil {
-		//##  NEED ERROR  ##
 		return
 	}
 
@@ -46,4 +47,16 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	//Removes cookie from the browser
 	cookie.MaxAge = -1
 	http.SetCookie(w, cookie)
+
+	//Sends a message back if successfully logged out
+	var msg = models.Resp{Msg: "Goodbye"}
+	
+	resp, err := json.Marshal(msg)
+	if err != nil {
+		http.Error(w, "500 internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(resp)
 }

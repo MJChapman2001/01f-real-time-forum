@@ -94,6 +94,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			Path: "/",
 			MaxAge: config.CookieAge,
 			SameSite: http.SameSiteNoneMode,
+			Secure: true,
 		}
 		http.SetCookie(w, cookie)
 	}
