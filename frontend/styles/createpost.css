@@ -1,6 +1,6 @@
 /* CREATE POST */
 
-.create-post-wrapper {
+.create-post-container {
     width: 50%;
     display: none;
     flex-direction: column;
@@ -14,7 +14,7 @@
     background-color: rgba(255, 255, 255, 1);
     border-radius: 20px;
     border: black solid 2px;
-    box-shadow: 0px 4px 0px #5f5e5e;
+    box-shadow: 0px 4px 0px rgb(27, 27, 27);
 }
 
 ::placeholder {
@@ -29,9 +29,8 @@ textarea {
     background-color: rgba(255, 255, 255, 1);
     border-radius: 20px;
     border: black solid 2px;
-    box-shadow: 0px 4px 0px #000000;
+    box-shadow: 0px 4px 0px rgb(27, 27, 27);
     resize: none;
-
 }
 
 #create-post-categories {
@@ -44,7 +43,6 @@ textarea {
     border: black solid 2px;
     box-shadow: 0px .5px 0px #0f0f0f;
     outline: none;
-
 }
 
 .create-post-btn {
@@ -52,6 +50,6 @@ textarea {
     border-radius: 37px;
     background-color: rgb(244, 242, 120);
     border: black solid 2px;
-    box-shadow: 0px 4px 0px #111111;
+    box-shadow: 0px 4px 0px rgb(27, 27, 27);
     margin-top: 3px;
 }

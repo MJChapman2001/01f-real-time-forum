@@ -8,6 +8,54 @@ const signupNav = document.querySelector('.signup-nav');
 const logoutNav = document.querySelector('.logout-nav');
 const rightPanel = document.querySelector('.right-panel');
 
+let datatest = [{
+    name: "Ricky",
+    message: "test",
+    date: "20/11/22",
+    id: 1
+}]
+
+
+let postdata = [
+    {
+	Id: "3",
+	User_id: "222",
+	Category: "category",
+	Title: "title3",
+	Content: "content",
+	Date: "22/12/22",
+	Likes: "likes",
+	Dislikes: "dislikes"
+},
+{
+	Id: "4",
+	User_id: "maddie",
+	Category: "JavaScript",
+	Title: "title4",
+	Content: "content4    Nulla aenean id tortor massa ante. Arcu massa felis, nibh nuncfames vel nunc. Nulla aenean id tortor massa ante. Arcu massa felis, nibh nunc fames vel nunc.",
+	Date: "22/12/22",
+	Likes: "likes",
+	Dislikes: "dislikes"
+}
+]
+
+commentsdata = [
+{
+    Id: "id",
+    Post_id: "postID",
+    User_id: "userID",
+    Content: 'content',
+    Date: "Date",
+    Likes: "Likes",
+    Dislikes: "Dislikes"
+}
+]
+
+userdata = [{
+    User_id: "userID",
+    Username: "maddiewesst"
+}]
+
 
 function createPost(postdata) {
 
@@ -265,12 +313,12 @@ document.querySelector(".create-post-btn").addEventListener("click", function() 
     const title = document.querySelector("#create-post-title").value
     const body = document.querySelector("#create-post-body").value
     const category = document.querySelector("#create-post-categories").value
-    let data = {
+    let postdata = {
         title: title,
         body: body,
         category: category
     }
-    console.log("create post:", data)
+    console.log("create post:", postdata)
     createPostContainer.style.display = "none"
     postsContainer.style.display = "flex"
 })
