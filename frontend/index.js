@@ -7,6 +7,123 @@ const signinContainer = document.querySelector('.signin-container');
 const signupNav = document.querySelector('.signup-nav');
 const logoutNav = document.querySelector('.logout-nav');
 
+function createPosts(postdata) {
+
+    postdata.map(({Id, User_id, Category, Title, Content, Date}) => {
+        var post = document.createElement("div");
+        post.className = "post"
+        post.setAttribute("id", Id)
+        postsContainer.appendChild(post)
+        var title = document.createElement("div");
+        title.className = "title"
+        title.innerText = Title
+        post.appendChild(title)
+        var author = document.createElement("div");
+        author.className = "author"
+        post.append(author)
+        var img = document.createElement("img");
+        img.src = "./frontend/assets/profile1.svg"
+        author.appendChild(img)
+        var user = document.createElement("div");
+        user.className = "post-username"
+        user.innerHTML = User_id
+        author.appendChild(user)
+        var date = document.createElement("div");
+        date.className = "date"
+        date.innerText = Date
+        author.appendChild(date)
+        var content = document.createElement("div");
+        content.className = "post-body"
+        content.innerText = Content
+        post.append(content)  
+        var commentsWrapper = document.createElement("div");
+        commentsWrapper.className = "comments-wrapper"
+        post.appendChild(commentsWrapper)
+        var likesDislikesWrapper = document.createElement("div");
+        likesDislikesWrapper.className = "likes-dislikes-wrapper"
+        commentsWrapper.appendChild(likesDislikesWrapper)
+        var likesWrapper = document.createElement("div");
+        likesWrapper.className = "likes-wrapper"
+        likesDislikesWrapper.appendChild(likesWrapper)
+        var likesImg = document.createElement("img");
+        likesImg.src = "./frontend/assets/like3.svg"
+        likesWrapper.appendChild(likesImg)
+        var likes = document.createElement("div");
+        likes.className = "likes"
+        likes.innerText = "3"
+        likesWrapper.appendChild(likes)
+        var dislikesWrapper = document.createElement("div");
+        dislikesWrapper.className = "likes-wrapper dislike"
+        likesDislikesWrapper.appendChild(dislikesWrapper)
+        var dislikesImg = document.createElement("img");
+        dislikesImg.src = "./frontend/assets/dislike4.svg"
+        dislikesWrapper.appendChild(dislikesImg)
+        var dislikes = document.createElement("div");
+        dislikes.className = "dislike"
+        dislikes.innerText = "0"
+        dislikesWrapper.appendChild(dislikes)
+        var comments = document.createElement("div");
+        comments.className = "comments"
+        commentsWrapper.appendChild(comments)
+        var commentsImg = document.createElement("img");
+        commentsImg.src = "./frontend/assets/comment.svg"
+        comments.appendChild(commentsImg)
+        var comment = document.createElement("div");
+        comment.className = "comment"
+        comment.innerText = "3" + " Comments"
+        comments.appendChild(comment)
+    })
+}
+function createPost(postdata) {
+
+    document.querySelector('#title').innerHTML = postdata.Title
+    document.querySelector('#username').innerHTML = postdata.User_id
+    document.querySelector('#date').innerHTML = postdata.Date
+    document.querySelector('.category').innerHTML = postdata.Category
+    document.querySelector('.full-content').innerHTML = postdata.Content
+}
+
+
+
+function createComments(commentsdata) {
+    commentsdata.map(({Id, Post_id, User_id, Content, Date, Likes, Dislikes}) =>{
+  var commentWrapper = document.createElement("div");
+  commentWrapper.className = "comment-wrapper"
+  postContainer.appendChild(commentWrapper)
+  var userImg = document.createElement("img");
+  userImg.src = "./frontend/assets/profile1.svg"
+  commentWrapper.appendChild(userImg)
+  var comment = document.createElement("div");
+  comment.className = "comment"
+  commentWrapper.appendChild(comment)
+  var commentUser = document.createElement("div");
+  commentUser.className = "comment-username"
+  commentUser.innerText = User_id
+  comment.appendChild(commentUser)
+  var commentSpan = document.createElement("span");
+  commentSpan.innerHTML = Content
+  comment.appendChild(commentSpan)
+})
+}
+
+function createUsers(userdata) {
+    userdata.map(({User_id, Username}) => {
+        var users = document.createElement("div");
+        users.className = "users"
+        rightPanel.appendChild(users)
+        var user = document.createElement("div");
+        user.className = "user"
+        users.appendChild(user)
+        var userImg = document.createElement("img");
+        userImg.src = "./frontend/assets/profile4.svg"
+        user.appendChild(userImg)
+        var username = document.createElement("p");
+        username.innerText = Username
+        user.appendChild(username)
+
+
+    })
+}
 
 //Sign in
 document.querySelector('.signin-btn').addEventListener("click", function() {
