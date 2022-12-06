@@ -132,8 +132,8 @@
                 </button>
             </div>
             <!-- main page -->
-            <div class="posts-wrapper">
-                <div class="post">
+            <div class="posts-container">
+                <div class="post" id="1">
                     <div class="title">This is a title</div>
                     <div class="author">
                         <img src="./frontend/assets/profile1.svg" alt="profile-pic">
@@ -154,7 +154,7 @@
                                 <img src="./frontend/assets/like3.svg" alt="" class="src">
                                 <div class="likes">2</div>
                             </div>
-                            <div class="likes-wrapper">
+                            <div class="likes-wrapper dislike">
                                 <img src="./frontend/assets/dislike4.svg" alt="" class="src">
                                 <div class="dislike">0</div>
                             </div>
@@ -167,12 +167,12 @@
                 </div>
                 <div class="post"></div>
                 <div class="post"></div>
-                <div class="post"></div>
-                <div class="post"></div>
-                <div class="post"></div>
+                <!-- <div class="post"></div> -->
+                <!-- <div class="post"></div> -->
+                <!-- <div class="post"></div> -->
             </div>
             <!-- create post -->
-            <div class="create-post-wrapper">
+            <div class="create-post-container">
                 <div class="create-title">
                     <input id="create-post-title" type="text" placeholder="Title..." />
                 </div>
@@ -189,14 +189,21 @@
             <!-- post page -->
             <div class="post-container">
                 <div class="post-wrapper">
-                    <div class="title">This is a title</div>
-                    <div class="author">
-                        <img src="./frontend/assets/profile1.svg" alt="profile-pic">
-                        <div class="post-username">maddiewesst</div>
-                        <div class="dot">•</div>
-                        <div class="date">22 November 2022</div>
+                    <div class="space-between">
+                        <div class="title" id="title">This is a title</div>
+                        <div class="category">JavaScript</div>
                     </div>
-                    <div class="full-post-body">
+
+
+                    <div class="author" id="author-post">
+                        <div class="left">
+                            <img src="./frontend/assets/profile1.svg" alt="profile-pic">
+                            <div class="post-username" id="username">maddiewesst</div>
+                            <div class="date" id="date">22 November 2022</div>
+                        </div>
+                        <!-- <div class="category">JavaScript</div> -->
+                    </div>
+                    <div class="full-content">
                         Nulla aenean id tortor massa ante. Arcu massa felis, nibh nunc
                         fames vel nunc. Nulla aenean id tortor massa ante. Arcu massa
                         felis, nibh nunc fames vel nunc.
@@ -229,9 +236,11 @@
                     <img src="./frontend/assets/profile1.svg" alt="" class="src">
                     <div class="comment">
                         <div class="comment-username">username</div>
-                        Nulla aenean id tortor massa ante. Arcu massa
-                        felis, nibh nunc fames vel nunc.
-                        felis, nibh nunc fames vel nunc.
+                        <span>
+                            Nulla aenean id tortor massa ante. Arcu massa
+                            felis, nibh nunc fames vel nunc.
+                            felis, nibh nunc fames vel nunc.
+                        </span>
                     </div>
                 </div>
             </div>
@@ -269,7 +278,7 @@
                 <div class="send-wrapper">
                     <input type="text" id="chat-input" placeholder="Start typing...">
                     <button id="send-btn">
-                        <img src="./frontend/assets/send.svg">
+                        <img src="./frontend/assets/send5.svg">
                     </button>
                 </div>
             </div>
@@ -281,6 +290,7 @@
                 <div class="user">
                     <img src="./frontend/assets/profile4.svg" />
                     <p>username</p>
+                    <span class="msg-notification">1</span>
                 </div>
                 <div class="user">
                     <img src="./frontend/assets/profile4.svg" />

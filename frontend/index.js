@@ -1,11 +1,43 @@
-const postsWrapper = document.querySelector('.posts-wrapper');
-const createPost = document.querySelector(".create-post-wrapper");
+const postsContainer = document.querySelector('.posts-container');
+const createPostContainer = document.querySelector(".create-post-container");
 const postContainer = document.querySelector(".post-container");
 const contentWrapper = document.querySelector('.content-wrapper');
 const registerContainer = document.querySelector('.register-container');
 const signinContainer = document.querySelector('.signin-container');
 const signupNav = document.querySelector('.signup-nav');
 const logoutNav = document.querySelector('.logout-nav');
+const rightPanel = document.querySelector('.right-panel');
+
+
+function createPost(postdata) {
+
+    document.querySelector('#title').innerHTML = postdata.Title
+    document.querySelector('#username').innerHTML = postdata.User_id
+    document.querySelector('#date').innerHTML = postdata.Date
+    document.querySelector('.category').innerHTML = postdata.Category
+    document.querySelector('.full-content').innerHTML = postdata.Content
+}
+
+function createComments(commentsdata) {
+    commentsdata.map(({Id, Post_id, User_id, Content, Date, Likes, Dislikes}) =>{
+  var commentWrapper = document.createElement("div");
+  commentWrapper.className = "comment-wrapper"
+  postContainer.appendChild(commentWrapper)
+  var userImg = document.createElement("img");
+  userImg.src = "./frontend/assets/profile1.svg"
+  commentWrapper.appendChild(userImg)
+  var comment = document.createElement("div");
+  comment.className = "comment"
+  commentWrapper.appendChild(comment)
+  var commentUser = document.createElement("div");
+  commentUser.className = "comment-username"
+  commentUser.innerText = User_id
+  comment.appendChild(commentUser)
+  var commentSpan = document.createElement("span");
+  commentSpan.innerHTML = Content
+  comment.appendChild(commentSpan)
+})
+}
 
 function createPosts(postdata) {
 
@@ -74,37 +106,6 @@ function createPosts(postdata) {
         comments.appendChild(comment)
     })
 }
-function createPost(postdata) {
-
-    document.querySelector('#title').innerHTML = postdata.Title
-    document.querySelector('#username').innerHTML = postdata.User_id
-    document.querySelector('#date').innerHTML = postdata.Date
-    document.querySelector('.category').innerHTML = postdata.Category
-    document.querySelector('.full-content').innerHTML = postdata.Content
-}
-
-
-
-function createComments(commentsdata) {
-    commentsdata.map(({Id, Post_id, User_id, Content, Date, Likes, Dislikes}) =>{
-  var commentWrapper = document.createElement("div");
-  commentWrapper.className = "comment-wrapper"
-  postContainer.appendChild(commentWrapper)
-  var userImg = document.createElement("img");
-  userImg.src = "./frontend/assets/profile1.svg"
-  commentWrapper.appendChild(userImg)
-  var comment = document.createElement("div");
-  comment.className = "comment"
-  commentWrapper.appendChild(comment)
-  var commentUser = document.createElement("div");
-  commentUser.className = "comment-username"
-  commentUser.innerText = User_id
-  comment.appendChild(commentUser)
-  var commentSpan = document.createElement("span");
-  commentSpan.innerHTML = Content
-  comment.appendChild(commentSpan)
-})
-}
 
 function createUsers(userdata) {
     userdata.map(({User_id, Username}) => {
@@ -125,8 +126,64 @@ function createUsers(userdata) {
     })
 }
 
+var conn;
+var msg = document.getElementById("chat-input");
+var log = document.querySelector(".chat")
+
+function appendLog(container, msg, date) {
+    var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
+    log.appendChild(container);
+    container.append(msg);
+    msg.append(date)
+   
+    if (doScroll) {
+        log.scrollTop = log.scrollHeight - log.clientHeight;
+    }
+}
+
 //Sign in
 document.querySelector('.signin-btn').addEventListener("click", function() {
+    // createPosts(postdata)
+    // createUsers(userdata)
+    document.querySelector('.profile').innerHTML = "username"
+    if (window["WebSocket"]) {
+        conn = new WebSocket("ws://" + document.location.host + "/ws");
+        conn.onclose = function (evt) {
+            // var item = document.createElement("div");
+            // item.innerHTML = "<b>Connection closed.</b>";
+            // appendLog(item);
+        };
+
+        
+
+        datatest.map(({name,message, date, id}) => {
+            var receiverContainer = document.createElement("div");
+            receiverContainer.className = "receiver-container"
+            var receiver = document.createElement("div");
+            receiver.className = "receiver"
+            receiver.innerText = message
+            var date = document.createElement("div");
+            date.className = "chat-time"
+            date.innerText = "date+time"
+            appendLog(receiverContainer, receiver, date);
+        } )
+        conn.onmessage = function (evt) {
+            var senderContainer = document.createElement("div");
+            senderContainer.className = "sender-container"
+            var sender = document.createElement("div");
+            sender.className = "sender"
+            sender.innerText = evt.data
+            var date = document.createElement("div");
+            date.className = "chat-time"
+            date.innerText = "date+time"
+            appendLog(senderContainer, sender, date);
+
+        };
+    } else {
+        var item = document.createElement("div");
+        item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
+        appendLog(item);
+    }
     // e.preventDefault()
     const emailUsername = document.querySelector('#email-username').value
     const signinPassword = document.querySelector('#signin-password').value
@@ -198,9 +255,9 @@ document.querySelector(".register-btn").addEventListener("click", function(e) {
 
 //New post button
 document.querySelector(".new-post-btn").addEventListener("click", function() {
-    postsWrapper.style.display = "none"
+    postsContainer.style.display = "none"
     postContainer.style.display = "none"
-    createPost.style.display = "flex"
+    createPostContainer.style.display = "flex"
 })
 
 //Create new post
@@ -214,44 +271,23 @@ document.querySelector(".create-post-btn").addEventListener("click", function() 
         category: category
     }
     console.log("create post:", data)
-    createPost.style.display = "none"
-    postsWrapper.style.display = "flex"
+    createPostContainer.style.display = "none"
+    postsContainer.style.display = "flex"
 })
 
 //Open post
 let post = document.querySelector(".post")
         post.addEventListener("click", function() {
+            console.log(post.id)
 
-            //MODAL
-        // const postRect = post.getBoundingClientRect()
-        // modalTop = postRect.top
-        // modalLeft = postRect.left
-        // console.log(modalTop)
-        // var modal = document.createElement("div");
-        // modal.className = "modal"
-        // modal.style.top = modalTop + "px"
-        // modal.style.left = modalLeft + "px"
-        // modal.style.display = "flex"
-        // let postsWrapper = document.querySelector(".posts-wrapper")
-        // postsWrapper.appendChild(modal)
+            createPost(postdata[post.id])
+            createComments(commentsdata)
 
-
-        // var title = document.createElement("div");
-        // title.className = "title"
-        // title.innerText = "this is a title"
-        // var author = document.createElement("div");
-        // author.className = "author"
-        // author.innerText = "author"
-        // var postBody = document.createElement("div");
-        // postBody.className = "post-body"
-        // postBody.innerText = "THIS IS A POST"
-
-        // modal.append(title, author, postBody)
 
 
 
     
-    postsWrapper.style.display = "none"
+    postsContainer.style.display = "none"
     postContainer.style.display = "flex"
 })
 
@@ -265,19 +301,25 @@ document.querySelector("#comment-input").addEventListener("keydown", function(ev
 
 function sendComment() {
     let comment = document.querySelector("#comment-input").value
-    data = {
-        comments: comment
+    commentsdata = {
+        Id: "id",
+        Post_id: "postID",
+        User_id: "userID",
+        Content: comment,
+        Date: "Date",
+        Likes: "Likes",
+        Dislikes: "Dislikes"
     }
     document.querySelector("#comment-input").value = ""
-    console.log("comments:", data)
+    console.log("comments:", commentsdata)
 }
 
 
 //Go back to home page when click on logo
 document.querySelector(".logo").addEventListener("click", function() {
-    createPost.style.display = "none"
+    createPostContainer.style.display = "none"
     postContainer.style.display = "none"
-    postsWrapper.style.display = "flex"
+    postsContainer.style.display = "flex"
 })
 
 //Log Out
