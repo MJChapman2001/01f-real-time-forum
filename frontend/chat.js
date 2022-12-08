@@ -1,11 +1,9 @@
 // open chat when click on user
-function OpenChat(e, conn, data) {
+function OpenChat(rid, conn, data, currId) {
     // document.querySelector(".user").style.fontWeight = "900"
     document.querySelector(".chat-wrapper").style.display = "flex"
     var msg = document.getElementById("chat-input");
     var log = document.querySelector(".chat")
-    var rid = e.getAttribute('id')
-    console.log(typeof +rid, +rid)
 
     log.innerHTML = ""
 
@@ -43,7 +41,7 @@ function OpenChat(e, conn, data) {
         let msgData = {
             id: 0,
             sender_id: 0,
-            receiver_id: +rid,
+            receiver_id: rid,
             content: msg.value,
             date: ''
         }
@@ -53,16 +51,20 @@ function OpenChat(e, conn, data) {
         return false;
     };
 
-    data.map(({content, date}) => {
+    if (data == null) {
+        return
+    }
+
+    data.map(({sender_id, content, date}) => {
         var receiverContainer = document.createElement("div");
-        receiverContainer.className = "receiver-container"
+        receiverContainer.className = (sender_id == currId) ? "sender-container": "receiver-container"
         var receiver = document.createElement("div");
-        receiver.className = "receiver"
+        receiver.className = (sender_id == currId) ? "sender": "receiver"
         receiver.innerText = content
-        var date = document.createElement("div");
-        date.className = "chat-time"
-        date.innerText = "date+time"
-        appendLog(receiverContainer, receiver, date);
+        var messagedate = document.createElement("div");
+        messagedate.className = "chat-time"
+        messagedate.innerText = date
+        appendLog(receiverContainer, receiver, messagedate);
     } )
 };
 

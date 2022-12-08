@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"real-time-forum/internal/config"
 	"real-time-forum/internal/database"
@@ -34,8 +35,10 @@ func SessionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	cid := strconv.Itoa(curr.Id)
+
 	//Sends a message back if successfully logged in
-	var msg = models.Resp{Msg: "Welcome "+curr.Username}
+	var msg = models.Resp{Msg: cid+"|"+curr.Username}
 	
 	resp, err := json.Marshal(msg)
 	if err != nil {

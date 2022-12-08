@@ -7,13 +7,19 @@ const signinContainer = document.querySelector('.signin-container');
 const signupNav = document.querySelector('.signup-nav');
 const logoutNav = document.querySelector('.logout-nav');
 const users = document.querySelector('.users');
+const commentsContainer = document.querySelector('.comments-container');
 
 var conn;
+var currId = 0
+var currUsername = ""
+var currPost = 0
 
 var allPosts = []
 var filteredPosts = []
 
 var allUsers = []
+
+var currComments = []
 
 //POST fetch function
 async function postData(url = '', data = {}) {
@@ -55,22 +61,31 @@ async function getUsers() {
     })
 }
 
+async function getComments(post_id) {
+    await getData('http://localhost:8000/comment?param=post_id&data='+post_id)
+    .then(value => {
+        currComments = value
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
 window.addEventListener('DOMContentLoaded', async function() {
     await getPosts()
     await getUsers()
 
-    var msg
     let sess = postData('http://localhost:8000/session')
     sess.then(value => {
-        msg = value.msg
-        console.log(msg)
+        let vals = value.msg.split("|")
+        currId = parseInt(vals[0])
+        currUsername = vals[1]
 
         signinContainer.style.display = "none"
         signupNav.style.display = "none"
         contentWrapper.style.display = "flex"  
         logoutNav.style.display = "flex"
 
-        document.querySelector('.profile').innerHTML = "username"
+        document.querySelector('.profile').innerHTML = currUsername
         if (window["WebSocket"]) {
             conn = new WebSocket("ws://" + document.location.host + "/ws");
             conn.onclose = function (evt) {
@@ -80,16 +95,17 @@ window.addEventListener('DOMContentLoaded', async function() {
             };
 
             conn.onmessage = function (evt) {
+                newMsg = JSON.parse(evt.data)
                 var senderContainer = document.createElement("div");
                 senderContainer.className = "sender-container"
                 var sender = document.createElement("div");
                 sender.className = "sender"
-                sender.innerText = evt.data
+                sender.innerText = newMsg.content
                 var date = document.createElement("div");
                 date.className = "chat-time"
-                date.innerText = "date+time"
+                date.innerText = newMsg.date
                 appendLog(senderContainer, sender, date);
-
+    
             };
         } else {
             var item = document.createElement("div");
@@ -117,10 +133,17 @@ function createPost(postdata) {
 }
 
 function createComments(commentsdata) {
-    commentsdata.map(({Id, Post_id, User_id, Content, Date, Likes, Dislikes}) =>{
+    console.log(commentsdata, currComments)
+
+    commentsContainer.innerHTML = ""
+    if (commentsdata == null) {
+        return
+    }
+
+    commentsdata.map(({id, post_id, user_id, content, date}) =>{
         var commentWrapper = document.createElement("div");
         commentWrapper.className = "comment-wrapper"
-        postContainer.appendChild(commentWrapper)
+        commentsContainer.appendChild(commentWrapper)
         var userImg = document.createElement("img");
         userImg.src = "./frontend/assets/profile1.svg"
         commentWrapper.appendChild(userImg)
@@ -129,10 +152,10 @@ function createComments(commentsdata) {
         commentWrapper.appendChild(comment)
         var commentUser = document.createElement("div");
         commentUser.className = "comment-username"
-        commentUser.innerText = User_id
+        commentUser.innerText = allUsers[user_id-1].username
         comment.appendChild(commentUser)
         var commentSpan = document.createElement("span");
-        commentSpan.innerHTML = Content
+        commentSpan.innerHTML = content
         comment.appendChild(commentSpan)
     })
 }
@@ -208,9 +231,13 @@ function createPosts(postdata) {
         comment.innerText = "3" + " Comments"
         comments.appendChild(comment)
 
-        post.addEventListener("click", function() {
-            createPost(postdata[post.id])
-            createComments(commentsdata)
+        post.addEventListener("click", async function(e) {
+            currPost = parseInt(e.target.getAttribute("id"))
+
+            await getComments(currPost)
+
+            createPost(allPosts[allPosts.length-currPost])
+            createComments(currComments)
         
             postsContainer.style.display = "none"
             postContainer.style.display = "flex"
@@ -236,7 +263,8 @@ function createUsers(userdata, conn) {
         user.addEventListener("click", function(e) {
             let resp = getData('http://localhost:8000/message?receiver='+id)
             resp.then(value => {
-                OpenChat(e.target, conn, value)
+                let rid = parseInt(e.target.getAttribute("id"))
+                OpenChat(rid, conn, value, currId)
             }).catch()
         })
     })
@@ -256,9 +284,25 @@ function appendLog(container, msg, date) {
     }
 }
 
+document.getElementById("categories").onchange = function () {
+    let val = document.getElementById("categories").value
+
+    if (val == "all") {
+        createPosts(allPosts)
+        return
+    }
+
+    filteredPosts = allPosts.filter((i) => {
+        console.log(i.category)
+        return i.category == val
+    })
+    console.log(filteredPosts)
+    createPosts(filteredPosts)
+}
+
 //Sign in
 document.querySelector('.signin-btn').addEventListener("click", async function() {
-    document.querySelector('.profile').innerHTML = "username"
+    document.querySelector('.profile').innerHTML = currUsername
 
     await getPosts()
     await getUsers()
@@ -271,11 +315,11 @@ document.querySelector('.signin-btn').addEventListener("click", async function()
         password: signinPassword
     }
     
-    var msg
     let resp = postData('http://localhost:8000/login', data)
     resp.then(value => {
-        msg = value.msg
-        console.log(msg)
+        let vals = value.msg.split("|")
+        currId = parseInt(vals[0])
+        currUsername = vals[1]
 
         signinContainer.style.display = "none"
         signupNav.style.display = "none"
@@ -284,9 +328,6 @@ document.querySelector('.signin-btn').addEventListener("click", async function()
 
         document.querySelector('#email-username').value = ""
         document.querySelector('#signin-password').value = ""
-
-        createPosts(allPosts)
-        createUsers(allUsers, conn)
 
         if (window["WebSocket"]) {
             conn = new WebSocket("ws://" + document.location.host + "/ws");
@@ -297,14 +338,15 @@ document.querySelector('.signin-btn').addEventListener("click", async function()
             };
     
             conn.onmessage = function (evt) {
+                newMsg = JSON.parse(evt.data)
                 var senderContainer = document.createElement("div");
                 senderContainer.className = "sender-container"
                 var sender = document.createElement("div");
                 sender.className = "sender"
-                sender.innerText = evt.data
+                sender.innerText = newMsg.content
                 var date = document.createElement("div");
                 date.className = "chat-time"
-                date.innerText = "date+time"
+                date.innerText = newMsg.date
                 appendLog(senderContainer, sender, date);
     
             };
@@ -313,6 +355,9 @@ document.querySelector('.signin-btn').addEventListener("click", async function()
             item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
             appendLog(item);
         }
+
+        createPosts(allPosts)
+        createUsers(allUsers, conn)
     })
 })
 
@@ -413,9 +458,11 @@ document.querySelector(".create-post-btn").addEventListener("click", function() 
     
     var msg
     let resp = postData('http://localhost:8000/post', data)
-    resp.then(value => {
+    resp.then(async value => {
         msg = value.msg
-        alert(msg)
+
+        await getPosts()
+        createPosts(allPosts)
 
         createPostContainer.style.display = "none"
         postsContainer.style.display = "flex"
@@ -433,16 +480,21 @@ document.querySelector("#comment-input").addEventListener("keydown", function(ev
 function sendComment() {
     let comment = document.querySelector("#comment-input").value
     commentsdata = {
-        Id: "id",
-        Post_id: "postID",
-        User_id: "userID",
-        Content: comment,
-        Date: "Date",
-        Likes: "Likes",
-        Dislikes: "Dislikes"
+        id: 0,
+        post_id: currPost,
+        user_id: currId,
+        content: comment,
+        date: ""
     }
-    document.querySelector("#comment-input").value = ""
-    console.log("comments:", commentsdata)
+    console.log(commentsdata)
+    
+    let resp = postData('http://localhost:8000/comment', commentsdata)
+    resp.then(async () => {
+        document.querySelector("#comment-input").value = ""
+
+        await getComments(currPost)
+        createComments(currComments)
+    })
 }
 
 

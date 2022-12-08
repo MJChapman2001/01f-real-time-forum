@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"strconv"
+	"time"
 
 	"real-time-forum/internal/models"
 )
@@ -18,8 +19,10 @@ func NewComment(path string, c models.Comment) error {
 
 	defer db.Close()
 
+	dt := time.Now().Format("01-02-2006 15:04:05")
+
 	//Executes the insert statement
-	_, err = db.Exec(AddComment, c.Post_id, c.User_id, c.Content, c.Date, c.Likes, c.Dislikes)
+	_, err = db.Exec(AddComment, c.Post_id, c.User_id, c.Content, dt)
 	if err != nil {
 		return err
 	}
@@ -36,7 +39,7 @@ func ConvertRowToComment(rows *sql.Rows) ([]models.Comment, error) {
 		var c models.Comment
 
 		//Stores the row data in a temporary comment struct
-		err := rows.Scan(&c.Id, &c.Post_id, &c.User_id, &c.Content, &c.Date, &c.Likes, &c.Dislikes)
+		err := rows.Scan(&c.Id, &c.Post_id, &c.User_id, &c.Content, &c.Date)
 		if err != nil {
 			break
 		}
@@ -46,9 +49,9 @@ func ConvertRowToComment(rows *sql.Rows) ([]models.Comment, error) {
 	}
 
 	//Returns an error if no rows are provided
-	if len(comments) == 0 {
-		return []models.Comment{}, errors.New("no row provided")
-	}
+	// if len(comments) == 0 {
+	// 	return []models.Comment{}, errors.New("no row provided")
+	// }
 
 	return comments, nil
 }
