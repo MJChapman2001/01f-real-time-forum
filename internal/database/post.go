@@ -49,9 +49,9 @@ func ConvertRowToPost(rows *sql.Rows) ([]models.Post, error) {
 	}
 
 	//Returns an error if no rows are provided
-	if len(posts) == 0 {
-		return []models.Post{}, errors.New("no row provided")
-	}
+	// if len(posts) == 0 {
+	// 	return []models.Post{}, errors.New("no row provided")
+	// }
 
 	return posts, nil
 }

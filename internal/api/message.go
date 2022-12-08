@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	
 	"real-time-forum/internal/config"
 	"real-time-forum/internal/database"
@@ -11,7 +12,7 @@ import (
 
 func MessageHandler(w http.ResponseWriter, r *http.Request) {
 	//Prevents the endpoint being called by other url paths
-	if r.URL.Path != "/post" {
+	if r.URL.Path != "/message" {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
 	}
@@ -19,12 +20,25 @@ func MessageHandler(w http.ResponseWriter, r *http.Request) {
 	//Checks whether it is a POST or GET request
 	switch r.Method {
 	case "GET":
-		//Grabs the sender and receiver ids from the url
-		s := r.URL.Query().Get("sender")
+		cookie, err := r.Cookie("session")
+		if err != nil {
+			return
+		}
+
+		foundVal := cookie.Value
+
+		curr, err := database.CurrentUser(config.Path, foundVal)
+		if err != nil {
+			return
+		}
+
+		s:= strconv.Itoa(curr.Id)
+
+		//Grabs the receiver id from the url
 		r := r.URL.Query().Get("receiver")
 
 		//Makes sure neither are empty
-		if s == "" || r == "" {
+		if  r == "" {
 			http.Error(w, "400 bad request", http.StatusBadRequest)
 			return
 		}
