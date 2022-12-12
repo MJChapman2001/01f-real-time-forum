@@ -143,7 +143,6 @@ function createPost(postdata) {
 }
 
 function createComments(commentsdata) {
-    console.log(commentsdata, currComments)
 
     commentsContainer.innerHTML = ""
     if (commentsdata == null) {
@@ -252,11 +251,9 @@ function createPosts(postdata) {
         //Open post
         post.addEventListener("click", async function(e) {
 
-            currPost = parseInt(e.target.getAttribute("id"))
+            currPost = parseInt(post.getAttribute("id"))
 
             await getComments(currPost)
-
-            console.log(allPosts[allPosts.length-currPost])
 
             createPost(allPosts[allPosts.length-currPost])
             
@@ -265,7 +262,7 @@ function createPosts(postdata) {
             postsContainer.style.display = "none"
             postContainer.style.display = "flex"
             topPanel.style.display = "none"
-            online.style.opacity = "0"
+            // online.style.opacity = "0"
         })
     })
 }
@@ -296,7 +293,7 @@ function createUsers(userdata, conn) {
         user.addEventListener("click", function(e) {
             let resp = getData('http://localhost:8000/message?receiver='+id)
             resp.then(value => {
-                let rid = parseInt(e.target.getAttribute("id"))
+                let rid = parseInt(user.getAttribute("id"))
                 console.log(rid)
                 OpenChat(rid, conn, value, currId)
             }).catch()
