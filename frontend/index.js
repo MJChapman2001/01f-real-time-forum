@@ -8,6 +8,11 @@ const signupNav = document.querySelector('.signup-nav');
 const logoutNav = document.querySelector('.logout-nav');
 const users = document.querySelector('.users');
 const commentsContainer = document.querySelector('.comments-container');
+const topPanel = document.querySelector('.top-panel');
+const newPostPopup = document.querySelector('.new-post-popup');
+const msgNotification = document.querySelector(".msg-notification");
+const online = document.querySelector(".online");
+
 
 var conn;
 var currId = 0
@@ -70,6 +75,8 @@ async function getComments(post_id) {
     })
 }
 
+
+
 window.addEventListener('DOMContentLoaded', async function() {
     await getPosts()
     await getUsers()
@@ -84,6 +91,8 @@ window.addEventListener('DOMContentLoaded', async function() {
         signupNav.style.display = "none"
         contentWrapper.style.display = "flex"  
         logoutNav.style.display = "flex"
+        createPostContainer.style.display = "none"
+        online.style.opacity = "0"
 
         document.querySelector('.profile').innerHTML = currUsername
         if (window["WebSocket"]) {
@@ -97,9 +106,9 @@ window.addEventListener('DOMContentLoaded', async function() {
             conn.onmessage = function (evt) {
                 newMsg = JSON.parse(evt.data)
                 var senderContainer = document.createElement("div");
-                senderContainer.className = "sender-container"
+                senderContainer.className = (newMsg.sender_id == currId) ? "sender-container": "receiver-container"
                 var sender = document.createElement("div");
-                sender.className = "sender"
+                sender.className = (newMsg.sender_id == currId) ? "sender": "receiver"
                 sender.innerText = newMsg.content
                 var date = document.createElement("div");
                 date.className = "chat-time"
@@ -123,10 +132,11 @@ window.addEventListener('DOMContentLoaded', async function() {
     })
 })
 
+
 function createPost(postdata) {
 
     document.querySelector('#title').innerHTML = postdata.title
-    document.querySelector('#username').innerHTML = postdata.user_id
+    document.querySelector('#username').innerHTML = allUsers[postdata.user_id-1].username
     document.querySelector('#date').innerHTML = postdata.date
     document.querySelector('.category').innerHTML = postdata.category
     document.querySelector('.full-content').innerHTML = postdata.content
@@ -150,13 +160,21 @@ function createComments(commentsdata) {
         var comment = document.createElement("div");
         comment.className = "comment"
         commentWrapper.appendChild(comment)
-        var commentUser = document.createElement("div");
-        commentUser.className = "comment-username"
-        commentUser.innerText = allUsers[user_id-1].username
-        comment.appendChild(commentUser)
+        var commentUserWrapper = document.createElement("div");
+        commentUserWrapper.className = "comment-user-wrapper"
+        comment.appendChild(commentUserWrapper)
+        var commentUsername = document.createElement("div");
+        commentUsername.className = "comment-username"
+        commentUsername.innerText = allUsers[user_id-1].username
+        commentUserWrapper.appendChild(commentUsername)
+        var commentDate = document.createElement("div");
+        commentDate.className = "comment-date"
+        commentDate.innerHTML = date
+        commentUserWrapper.appendChild(commentDate)
         var commentSpan = document.createElement("span");
         commentSpan.innerHTML = content
         comment.appendChild(commentSpan)
+       
     })
 }
 
@@ -231,16 +249,23 @@ function createPosts(postdata) {
         comment.innerText = "3" + " Comments"
         comments.appendChild(comment)
 
+        //Open post
         post.addEventListener("click", async function(e) {
+
             currPost = parseInt(e.target.getAttribute("id"))
 
             await getComments(currPost)
 
+            console.log(allPosts[allPosts.length-currPost])
+
             createPost(allPosts[allPosts.length-currPost])
+            
             createComments(currComments)
         
             postsContainer.style.display = "none"
             postContainer.style.display = "flex"
+            topPanel.style.display = "none"
+            online.style.opacity = "0"
         })
     })
 }
@@ -256,14 +281,23 @@ function createUsers(userdata, conn) {
         var userImg = document.createElement("img");
         userImg.src = "./frontend/assets/profile4.svg"
         user.appendChild(userImg)
+        var userOnline = document.createElement("div");
+        userOnline.className = "online"
+        user.appendChild(userOnline)
         var chatusername = document.createElement("p");
         chatusername.innerText = username
         user.appendChild(chatusername)
+        var msgNotification = document.createElement("div");
+        msgNotification.className = "msg-notification"
+        msgNotification.innerText = 1
+        user.appendChild(msgNotification)
+
 
         user.addEventListener("click", function(e) {
             let resp = getData('http://localhost:8000/message?receiver='+id)
             resp.then(value => {
                 let rid = parseInt(e.target.getAttribute("id"))
+                console.log(rid)
                 OpenChat(rid, conn, value, currId)
             }).catch()
         })
@@ -438,6 +472,7 @@ document.querySelector(".new-post-btn").addEventListener("click", function() {
     postsContainer.style.display = "none"
     postContainer.style.display = "none"
     createPostContainer.style.display = "flex"
+    topPanel.style.display = "none"
 })
 
 //Create new post
@@ -466,6 +501,7 @@ document.querySelector(".create-post-btn").addEventListener("click", function() 
 
         createPostContainer.style.display = "none"
         postsContainer.style.display = "flex"
+        topPanel.style.display = "flex"
     })
 })
 
@@ -498,12 +534,18 @@ function sendComment() {
 }
 
 
-//Go back to home page when click on logo
-document.querySelector(".logo").addEventListener("click", function() {
+//Go back to home page when click on logo + back button
+document.querySelector(".logo").addEventListener("click", home)
+document.querySelector(".back").addEventListener("click", home)
+document.querySelector("#back-btn").addEventListener("click", home)
+
+function home() {
     createPostContainer.style.display = "none"
     postContainer.style.display = "none"
     postsContainer.style.display = "flex"
-})
+    topPanel.style.display = "flex"
+
+}
 
 //Log Out
 document.querySelector(".logout-btn").addEventListener("click", function() {
@@ -518,5 +560,19 @@ document.querySelector(".logout-btn").addEventListener("click", function() {
         contentWrapper.style.display = "none"  
         signupNav.style.display = "flex"
         logoutNav.style.display = "none"
+        online.style.opacity = "0"
+
     })
 })
+
+//New post notification
+// newPostPopup.style.display = "block"
+// newPostPopup.addEventListener('click', function(){location.reload()});
+//  newPostPopup.addEventListener('click', function() {
+//     createPosts(allPosts)
+// });
+
+//New message notification
+// msgNotification.style.opacity = "1"
+// msgNotification.innerText = msgNumber
+

@@ -114,8 +114,12 @@
     </div>
 
     <div class="content-wrapper">
+
         <!-- mid section -->
         <div class="mid-section">
+            <div class="new-post-popup link">
+                new posts 
+            </div>
             <!-- top panel -->
             <div class="top-panel">
                 <div class="filter-categories">
@@ -172,6 +176,10 @@
             </div>
             <!-- create post -->
             <div class="create-post-container">
+                <div class="back">
+
+                    <img src="./frontend/assets/back-arrow.svg">
+                </div>
                 <div class="create-title">
                     <input id="create-post-title" type="text" placeholder="Title..." />
                 </div>
@@ -186,14 +194,17 @@
                 </button>
             </div>
             <!-- post page -->
+
             <div class="post-container">
+                <div class="back" id="back-btn">
+
+                    <img src="./frontend/assets/back-arrow.svg">
+                </div>
                 <div class="post-wrapper">
                     <div class="space-between">
                         <div class="title" id="title">This is a title</div>
                         <div class="category">JavaScript</div>
                     </div>
-
-
                     <div class="author" id="author-post">
                         <div class="left">
                             <img src="./frontend/assets/profile1.svg" alt="profile-pic">
@@ -287,12 +298,15 @@
         <div class="right-panel">
             <div class="users">
 
-                <!-- <div class="user">
+                 <!-- <div class="user">
+                    
                     <img src="./frontend/assets/profile4.svg" />
+                    <div class="online"></div>
+
                     <p>username</p>
                     <span class="msg-notification">1</span>
-                </div>
-                <div class="user">
+                </div> -->
+                <!-- <div class="user">
                     <img src="./frontend/assets/profile4.svg" />
                     <p>username</p>
                 </div>

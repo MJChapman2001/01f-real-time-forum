@@ -1,6 +1,9 @@
-// open chat when click on user
+
 function OpenChat(rid, conn, data, currId) {
     // document.querySelector(".user").style.fontWeight = "900"
+    document.querySelector(".chat-username-wrapper p").innerText = allUsers[rid-1].username
+    const msgNotification = document.querySelector(".msg-notification");
+    msgNotification.style.opacity = "0"
     document.querySelector(".chat-wrapper").style.display = "flex"
     var msg = document.getElementById("chat-input");
     var log = document.querySelector(".chat")
