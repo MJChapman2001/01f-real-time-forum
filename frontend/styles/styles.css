@@ -60,7 +60,7 @@ body {
     height: 90%;
     display: none;  
     justify-content: center;
-    margin-top: 50px;
+    margin: 50px;
 
 }
 
@@ -76,11 +76,14 @@ body {
 .right-panel {
     height: 100%;
     width: 20%;
+    min-width: 200px;
 }
 
 .logout-btn {
     background-color: transparent;
     border: none;
+    display: flex;
+    align-items: center;
 
 }
 
@@ -110,7 +113,7 @@ body {
     font-size: 0.8rem;
     position: fixed;
     top: 100px;
-    display: none;
+    /* display: none ; */
 }
 
 /* POSTS */
@@ -149,7 +152,7 @@ body {
 }
 
 .post:hover {
-    box-shadow: 0px 4px 0px #000000;
+    box-shadow: 2px 4px 0px #000000;
 }
 
 .title {
@@ -181,7 +184,7 @@ body {
 
 .post-username {
     color: rgb(37, 37, 37);
-    /* font-weight: bold; */
+    font-weight: bold;
     /* font-size: .9rem; */
 
 }
@@ -257,10 +260,12 @@ body {
 }
 
 .online {
-    padding: 6px;
-    background-color: rgb(19, 148, 19);
+    padding: 4.4px;
+    /* background-color: rgb(19, 148, 19); */
+    background-color:  #84cd1c;
+    border: #000000 solid 1.5px;
     border-radius: 50%;
-    z-index: 10;
+    z-index: 1;
     margin-left: -25px;
     margin-bottom: -10px;
     opacity: 0;
@@ -350,7 +355,7 @@ body {
     background-color: rgba(255, 255, 255, 1);
     border-radius: 20px;
     border: black solid 2px;
-    box-shadow: 0px 4px 0px #000000;
+    /* box-shadow: 0px 4px 0px #000000; */
 }
 #comment-input {
     width: 100%;
@@ -385,8 +390,8 @@ body {
 
 .comments-container {   
    
-    max-width: 90%;
-    min-width: 50%;
+    width: 90%;
+    height: fit-content;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -415,7 +420,11 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 90%;
+    height: fit-content;
+   
 }
+
 .comment-user-wrapper {
     display: flex;
     align-items: center;

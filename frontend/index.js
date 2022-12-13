@@ -76,54 +76,18 @@ async function getComments(post_id) {
 }
 
 
-
 window.addEventListener('DOMContentLoaded', async function() {
-    await getPosts()
-    await getUsers()
-
+   
     let sess = postData('http://localhost:8000/session')
     sess.then(value => {
         let vals = value.msg.split("|")
         currId = parseInt(vals[0])
         currUsername = vals[1]
 
-        signinContainer.style.display = "none"
-        signupNav.style.display = "none"
-        contentWrapper.style.display = "flex"  
-        logoutNav.style.display = "flex"
-        createPostContainer.style.display = "none"
-        online.style.opacity = "0"
-
         document.querySelector('.profile').innerHTML = currUsername
-        if (window["WebSocket"]) {
-            conn = new WebSocket("ws://" + document.location.host + "/ws");
-            conn.onclose = function (evt) {
-                // var item = document.createElement("div");
-                // item.innerHTML = "<b>Connection closed.</b>";
-                // appendLog(item);
-            };
 
-            conn.onmessage = function (evt) {
-                newMsg = JSON.parse(evt.data)
-                var senderContainer = document.createElement("div");
-                senderContainer.className = (newMsg.sender_id == currId) ? "sender-container": "receiver-container"
-                var sender = document.createElement("div");
-                sender.className = (newMsg.sender_id == currId) ? "sender": "receiver"
-                sender.innerText = newMsg.content
-                var date = document.createElement("div");
-                date.className = "chat-time"
-                date.innerText = newMsg.date
-                appendLog(senderContainer, sender, date);
-    
-            };
-        } else {
-            var item = document.createElement("div");
-            item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
-            appendLog(item);
-        }
+        openHome()
 
-        createPosts(allPosts)
-        createUsers(allUsers, conn)
     }).catch(() => {
         signinContainer.style.display = "flex"
         signupNav.style.display = "flex"
@@ -131,7 +95,6 @@ window.addEventListener('DOMContentLoaded', async function() {
         logoutNav.style.display = "none"
     })
 })
-
 
 function createPost(postdata) {
 
@@ -154,7 +117,7 @@ function createComments(commentsdata) {
         commentWrapper.className = "comment-wrapper"
         commentsContainer.appendChild(commentWrapper)
         var userImg = document.createElement("img");
-        userImg.src = "./frontend/assets/profile1.svg"
+        userImg.src = "./frontend/assets/profile7.svg"
         commentWrapper.appendChild(userImg)
         var comment = document.createElement("div");
         comment.className = "comment"
@@ -170,7 +133,7 @@ function createComments(commentsdata) {
         commentDate.className = "comment-date"
         commentDate.innerHTML = date
         commentUserWrapper.appendChild(commentDate)
-        var commentSpan = document.createElement("span");
+        var commentSpan = document.createElement("div");
         commentSpan.innerHTML = content
         comment.appendChild(commentSpan)
        
@@ -197,7 +160,7 @@ function createPosts(postdata) {
         author.className = "author"
         post.append(author)
         var img = document.createElement("img");
-        img.src = "./frontend/assets/profile1.svg"
+        img.src = "./frontend/assets/profile7.svg"
         author.appendChild(img)
         var user = document.createElement("div");
         user.className = "post-username"
@@ -276,7 +239,7 @@ function createUsers(userdata, conn) {
         user.setAttribute("id", id)
         users.appendChild(user)
         var userImg = document.createElement("img");
-        userImg.src = "./frontend/assets/profile4.svg"
+        userImg.src = "./frontend/assets/profile7.svg"
         user.appendChild(userImg)
         var userOnline = document.createElement("div");
         userOnline.className = "online"
@@ -301,20 +264,21 @@ function createUsers(userdata, conn) {
     })
 }
 
-var msg = document.getElementById("chat-input");
-var log = document.querySelector(".chat")
+// var msg = document.getElementById("chat-input");
+// var log = document.querySelector(".chat")
 
-function appendLog(container, msg, date) {
-    var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
-    log.appendChild(container);
-    container.append(msg);
-    msg.append(date)
+// function appendLog(container, msg, date) {
+//     var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
+//     log.appendChild(container);
+//     container.append(msg);
+//     msg.append(date)
    
-    if (doScroll) {
-        log.scrollTop = log.scrollHeight - log.clientHeight;
-    }
-}
+//     if (doScroll) {
+//         log.scrollTop = log.scrollHeight - log.clientHeight;
+//     }
+// }
 
+//Filter posts by category
 document.getElementById("categories").onchange = function () {
     let val = document.getElementById("categories").value
 
@@ -332,11 +296,7 @@ document.getElementById("categories").onchange = function () {
 }
 
 //Sign in
-document.querySelector('.signin-btn').addEventListener("click", async function() {
-    document.querySelector('.profile').innerHTML = currUsername
-
-    await getPosts()
-    await getUsers()
+document.querySelector('.signin-btn').addEventListener("click", function() {
 
     // e.preventDefault()
     const emailUsername = document.querySelector('#email-username').value
@@ -352,45 +312,54 @@ document.querySelector('.signin-btn').addEventListener("click", async function()
         currId = parseInt(vals[0])
         currUsername = vals[1]
 
-        signinContainer.style.display = "none"
-        signupNav.style.display = "none"
-        contentWrapper.style.display = "flex"
-        logoutNav.style.display = "flex"
+        document.querySelector('.profile').innerHTML = currUsername
 
         document.querySelector('#email-username').value = ""
         document.querySelector('#signin-password').value = ""
-
-        if (window["WebSocket"]) {
-            conn = new WebSocket("ws://" + document.location.host + "/ws");
-            conn.onclose = function (evt) {
-                // var item = document.createElement("div");
-                // item.innerHTML = "<b>Connection closed.</b>";
-                // appendLog(item);
-            };
-    
-            conn.onmessage = function (evt) {
-                newMsg = JSON.parse(evt.data)
-                var senderContainer = document.createElement("div");
-                senderContainer.className = "sender-container"
-                var sender = document.createElement("div");
-                sender.className = "sender"
-                sender.innerText = newMsg.content
-                var date = document.createElement("div");
-                date.className = "chat-time"
-                date.innerText = newMsg.date
-                appendLog(senderContainer, sender, date);
-    
-            };
-        } else {
-            var item = document.createElement("div");
-            item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
-            appendLog(item);
-        }
-
-        createPosts(allPosts)
-        createUsers(allUsers, conn)
+        openHome()
+     
     })
 })
+
+async function openHome() {
+    await getPosts()
+    await getUsers()
+
+    signinContainer.style.display = "none"
+    signupNav.style.display = "none"
+    contentWrapper.style.display = "flex"
+    logoutNav.style.display = "flex"
+
+    if (window["WebSocket"]) {
+        conn = new WebSocket("ws://" + document.location.host + "/ws");
+        conn.onclose = function (evt) {
+            // var item = document.createElement("div");
+            // item.innerHTML = "<b>Connection closed.</b>";
+            // appendLog(item);
+        };
+
+        conn.onmessage = function (evt) {
+            newMsg = JSON.parse(evt.data)
+            var senderContainer = document.createElement("div");
+            senderContainer.className = "sender-container"
+            var sender = document.createElement("div");
+            sender.className = "sender"
+            sender.innerText = newMsg.content
+            var date = document.createElement("div");
+            date.className = "chat-time"
+            date.innerText = newMsg.date
+            appendLog(senderContainer, sender, date);
+
+        };
+    } else {
+        var item = document.createElement("div");
+        item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
+        appendLog(item);
+    }
+
+    createPosts(allPosts)
+    createUsers(allUsers, conn)
+}
 
 //Sign up/Sign in button + link
 document.querySelector('#signup-link').addEventListener('click', function() {
@@ -457,10 +426,12 @@ document.querySelector(".register-btn").addEventListener("click", function(e) {
     let resp = postData('http://localhost:8000/register', data)
     resp.then(value => {
         msg = value.msg
-        alert(msg)
-
+        // alert(msg)
+        console.log(msg)
+        signin()
         registerContainer.style.display = "none"
-        signinContainer.style.display = "block"  
+        // signinContainer.style.display = "block" 
+        
     })
 })
 
@@ -519,7 +490,7 @@ function sendComment() {
         content: comment,
         date: ""
     }
-    console.log(commentsdata)
+
     
     let resp = postData('http://localhost:8000/comment', commentsdata)
     resp.then(async () => {
@@ -541,7 +512,6 @@ function home() {
     postContainer.style.display = "none"
     postsContainer.style.display = "flex"
     topPanel.style.display = "flex"
-
 }
 
 //Log Out
@@ -557,7 +527,7 @@ document.querySelector(".logout-btn").addEventListener("click", function() {
         contentWrapper.style.display = "none"  
         signupNav.style.display = "flex"
         logoutNav.style.display = "none"
-        online.style.opacity = "0"
+        // online.style.opacity = "0"
 
     })
 })
@@ -565,11 +535,12 @@ document.querySelector(".logout-btn").addEventListener("click", function() {
 //New post notification
 // newPostPopup.style.display = "block"
 // newPostPopup.addEventListener('click', function(){location.reload()});
-//  newPostPopup.addEventListener('click', function() {
-//     createPosts(allPosts)
-// });
+ newPostPopup.addEventListener('click', async function() {
+    
+    await getPosts()
+    createPosts(allPosts)
+});
 
 //New message notification
 // msgNotification.style.opacity = "1"
 // msgNotification.innerText = msgNumber
-

@@ -2,6 +2,7 @@
 
 .create-post-container {
     width: 50%;
+    min-width: 200px;
     display: none;
     flex-direction: column;
     gap: 15px;
@@ -14,7 +15,7 @@
     background-color: rgba(255, 255, 255, 1);
     border-radius: 20px;
     border: black solid 2px;
-    box-shadow: 0px 4px 0px #000000;
+    box-shadow: 0px 3px 0px #000000;
 }
 
 ::placeholder {
@@ -29,10 +30,15 @@ textarea {
     background-color: rgba(255, 255, 255, 1);
     border-radius: 20px;
     border: black solid 2px;
-    box-shadow: 0px 4px 0px #000000;
+    box-shadow: 0px 3px 0px #151515;
     resize: none;
     font-family: 'Open Sans', sans-serif;
 }
+
+/* textarea:hover {
+    box-shadow: 4px 4px 0px #000000;
+    
+} */
 
 #create-post-categories {
     padding: 20px;
@@ -42,7 +48,7 @@ textarea {
     background-color: rgba(255, 255, 255, 1);
     border-radius: 20px;
     border: black solid 2px;
-    box-shadow: 0px .5px 0px #0f0f0f;
+    box-shadow: 0px .5px 0px #161616;
     outline: none;
 
 }

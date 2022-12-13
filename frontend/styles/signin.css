@@ -1,16 +1,15 @@
 
 .signin-container {
-    /* display: flex;
-    justify-content: center; 
-   
-    margin-top: 10%; */
+    display: block;
     width: 50%;
+    min-width: 200px;
     margin: auto;
     margin-top: 10%;
 }
 
 .signin {
     width: 50%;
+    min-width: 200px;
     margin: auto;
     display: flex;
     flex-direction: column;
