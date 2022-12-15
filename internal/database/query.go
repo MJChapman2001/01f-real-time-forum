@@ -16,7 +16,7 @@ const (
 	GetUserById = `SELECT * FROM users WHERE id = ?`
 	GetUserByUsername = `SELECT * FROM users WHERE username = ?`
 	GetUserByEmail = `SELECT * FROM users WHERE email = ?`
-	GetAllUser = `SELECT * FROM users`
+	GetAllUser = `SELECT * FROM users ORDER BY username ASC`
 	GetPostById = `SELECT * FROM posts WHERE id = ? ORDER BY id DESC`
 	GetAllPost = `SELECT * FROM posts ORDER BY id DESC`
 	GetAllPostByCategory = `SELECT * FROM posts WHERE category = ? ORDER BY id DESC`

@@ -2,7 +2,7 @@ package chat
 
 import (
 	"encoding/json"
-	
+
 	"real-time-forum/internal/models"
 )
 
@@ -38,9 +38,59 @@ func (h *Hub) Run() {
 		case client := <-h.register:
 			// h.clients[client] = true
 			h.clients[client.userID] = client
+
+			var uids []int
+
+			for i, _ := range h.clients {
+				uids = append(uids, i)
+			}
+
+			var msg =  models.OnlineUsers{
+				UserIds: uids,
+				Msg_type: "online",
+			}
+
+			sendMsg, err := json.Marshal(msg)
+			if err != nil {
+				panic(err)
+			}
+
+			for _, c := range h.clients {
+				select {
+				case c.send <- sendMsg:
+				default:
+					close(c.send)
+					delete(h.clients, c.userID)
+				}
+			}
 		case client := <-h.unregister:
 			if _, ok := h.clients[client.userID]; ok {
 				delete(h.clients, client.userID)
+
+				var uids []int
+
+				for i, _ := range h.clients {
+					uids = append(uids, i)
+				}
+
+				var msg =  models.OnlineUsers{
+					UserIds: uids,
+					Msg_type: "online",
+				}
+	
+				sendMsg, err := json.Marshal(msg)
+				if err != nil {
+					panic(err)
+				}
+	
+				for _, c := range h.clients {
+					select {
+					case c.send <- sendMsg:
+					default:
+						close(c.send)
+						delete(h.clients, c.userID)
+					}
+				}
 				close(client.send)
 			}
 		case message := <-h.broadcast:
@@ -56,13 +106,26 @@ func (h *Hub) Run() {
 				panic(err)
 			}
 
-			for _, client := range h.clients {
-				if (client.userID == msg.Receiver_id) {
-					select {
-					case client.send <- sendMsg:
-					default:
-						close(client.send)
-						delete(h.clients, client.userID)
+			if msg.Msg_type == "msg" {
+				for _, client := range h.clients {
+					if (client.userID == msg.Receiver_id) {
+						select {
+						case client.send <- sendMsg:
+						default:
+							close(client.send)
+							delete(h.clients, client.userID)
+						}
+					}
+				}
+			} else {
+				for _, client := range h.clients {
+					if client.userID != msg.Sender_id {
+						select {
+						case client.send <- sendMsg:
+						default:
+							close(client.send)
+							delete(h.clients, client.userID)
+						}
 					}
 				}
 			}

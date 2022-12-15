@@ -79,11 +79,14 @@ func (c *Client) readPump() {
 		}
 
 		msg.Sender_id = c.userID
-		msg.Date = time.Now().Format("01-02-2006 15:04:05")
 
-		err = database.NewMessage(config.Path, msg)
-		if err != nil {
-			panic(err)
+		if msg.Msg_type == "msg" {
+			msg.Date = time.Now().Format("01-02-2006 15:04:05")
+
+			err = database.NewMessage(config.Path, msg)
+			if err != nil {
+				panic(err)
+			}
 		}
 
 		sendMsg, err := json.Marshal(msg)

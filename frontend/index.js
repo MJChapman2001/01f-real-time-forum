@@ -6,7 +6,8 @@ const registerContainer = document.querySelector('.register-container');
 const signinContainer = document.querySelector('.signin-container');
 const signupNav = document.querySelector('.signup-nav');
 const logoutNav = document.querySelector('.logout-nav');
-const users = document.querySelector('.users');
+const onlineUsers = document.querySelector('.online-users');
+const offlineUsers = document.querySelector('.offline-users');
 const commentsContainer = document.querySelector('.comments-container');
 
 var conn;
@@ -18,6 +19,7 @@ var allPosts = []
 var filteredPosts = []
 
 var allUsers = []
+var online = []
 
 var currComments = []
 
@@ -70,6 +72,44 @@ async function getComments(post_id) {
     })
 }
 
+function startWS() {
+    if (window["WebSocket"]) {
+        conn = new WebSocket("ws://" + document.location.host + "/ws");
+        conn.onclose = function (evt) {
+            // var item = document.createElement("div");
+            // item.innerHTML = "<b>Connection closed.</b>";
+            // appendLog(item);
+        };
+
+        conn.onmessage = async function (evt) {
+            newMsg = JSON.parse(evt.data)
+            
+            if (newMsg.msg_type == "msg") {
+                var senderContainer = document.createElement("div");
+                senderContainer.className = (newMsg.sender_id == currId) ? "sender-container": "receiver-container"
+                var sender = document.createElement("div");
+                sender.className = (newMsg.sender_id == currId) ? "sender": "receiver"
+                sender.innerText = newMsg.content
+                var date = document.createElement("div");
+                date.className = "chat-time"
+                date.innerText = newMsg.date
+                appendLog(senderContainer, sender, date);
+            } else if (newMsg.msg_type == "online") {
+                online = newMsg.user_ids
+                await getUsers()
+
+                createUsers(allUsers, conn)
+            } else if (newMsg.msg_type == "post") {
+                console.log("New Post")
+            }
+        };
+    } else {
+        var item = document.createElement("div");
+        item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
+        appendLog(item);
+    }
+}
+
 window.addEventListener('DOMContentLoaded', async function() {
     await getPosts()
     await getUsers()
@@ -86,32 +126,7 @@ window.addEventListener('DOMContentLoaded', async function() {
         logoutNav.style.display = "flex"
 
         document.querySelector('.profile').innerHTML = currUsername
-        if (window["WebSocket"]) {
-            conn = new WebSocket("ws://" + document.location.host + "/ws");
-            conn.onclose = function (evt) {
-                // var item = document.createElement("div");
-                // item.innerHTML = "<b>Connection closed.</b>";
-                // appendLog(item);
-            };
-
-            conn.onmessage = function (evt) {
-                newMsg = JSON.parse(evt.data)
-                var senderContainer = document.createElement("div");
-                senderContainer.className = "sender-container"
-                var sender = document.createElement("div");
-                sender.className = "sender"
-                sender.innerText = newMsg.content
-                var date = document.createElement("div");
-                date.className = "chat-time"
-                date.innerText = newMsg.date
-                appendLog(senderContainer, sender, date);
-    
-            };
-        } else {
-            var item = document.createElement("div");
-            item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
-            appendLog(item);
-        }
+        startWS()
 
         createPosts(allPosts)
         createUsers(allUsers, conn)
@@ -246,13 +261,20 @@ function createPosts(postdata) {
 }
 
 function createUsers(userdata, conn) {
-    users.innerHTML = ""
+    onlineUsers.innerHTML = ""
+    offlineUsers.innerHTML = ""
 
     userdata.map(({id, username}) => {
         var user = document.createElement("div");
         user.className = "user"
         user.setAttribute("id", id)
-        users.appendChild(user)
+
+        if (online.includes(id)) {
+            onlineUsers.appendChild(user)
+        } else {
+            offlineUsers.appendChild(user)
+        }
+
         var userImg = document.createElement("img");
         userImg.src = "./frontend/assets/profile4.svg"
         user.appendChild(userImg)
@@ -263,7 +285,7 @@ function createUsers(userdata, conn) {
         user.addEventListener("click", function(e) {
             let resp = getData('http://localhost:8000/message?receiver='+id)
             resp.then(value => {
-                let rid = parseInt(e.target.getAttribute("id"))
+                let rid = parseInt(user.getAttribute("id"))
                 OpenChat(rid, conn, value, currId)
             }).catch()
         })
@@ -329,32 +351,7 @@ document.querySelector('.signin-btn').addEventListener("click", async function()
         document.querySelector('#email-username').value = ""
         document.querySelector('#signin-password').value = ""
 
-        if (window["WebSocket"]) {
-            conn = new WebSocket("ws://" + document.location.host + "/ws");
-            conn.onclose = function (evt) {
-                // var item = document.createElement("div");
-                // item.innerHTML = "<b>Connection closed.</b>";
-                // appendLog(item);
-            };
-    
-            conn.onmessage = function (evt) {
-                newMsg = JSON.parse(evt.data)
-                var senderContainer = document.createElement("div");
-                senderContainer.className = "sender-container"
-                var sender = document.createElement("div");
-                sender.className = "sender"
-                sender.innerText = newMsg.content
-                var date = document.createElement("div");
-                date.className = "chat-time"
-                date.innerText = newMsg.date
-                appendLog(senderContainer, sender, date);
-    
-            };
-        } else {
-            var item = document.createElement("div");
-            item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
-            appendLog(item);
-        }
+        startWS()
 
         createPosts(allPosts)
         createUsers(allUsers, conn)
@@ -464,6 +461,8 @@ document.querySelector(".create-post-btn").addEventListener("click", function() 
         await getPosts()
         createPosts(allPosts)
 
+        sendMsg(conn, 0, {value: "New Post"}, 'post')
+
         createPostContainer.style.display = "none"
         postsContainer.style.display = "flex"
     })
@@ -505,6 +504,12 @@ document.querySelector(".logo").addEventListener("click", function() {
     postsContainer.style.display = "flex"
 })
 
+function closeWS() {
+    if (conn.readyState === WebSocket.OPEN) {
+        conn.close()
+    }
+}
+
 //Log Out
 document.querySelector(".logout-btn").addEventListener("click", function() {
     var msg
@@ -518,5 +523,7 @@ document.querySelector(".logout-btn").addEventListener("click", function() {
         contentWrapper.style.display = "none"  
         signupNav.style.display = "flex"
         logoutNav.style.display = "none"
+
+        closeWS()
     })
 })
