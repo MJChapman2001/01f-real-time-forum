@@ -38,8 +38,6 @@ const (
 		user_id INTEGER NOT NULL,
 		content TEXT NOT NULL,
 		date TEXT NOT NULL,
-		likes INTEGER NOT NULL,
-		dislikes INTEGER NOT NULL,
 		FOREIGN KEY(post_id) REFERENCES posts(id),
 		FOREIGN KEY(user_id) REFERENCES users(id)
 	);

@@ -2,8 +2,9 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
-	
+
 	"real-time-forum/internal/config"
 	"real-time-forum/internal/database"
 	"real-time-forum/internal/models"
@@ -56,12 +57,25 @@ func CommentHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		fmt.Println(newComment)
+
 		//Attemps to add the new post to the database
 		err = database.NewComment(config.Path, newComment)
 		if err != nil {
 			http.Error(w, "500 internal server error", http.StatusInternalServerError)
 			return
 		}
+
+		var msg = models.Resp{Msg: "Sent comment"}
+	
+		resp, err := json.Marshal(msg)
+		if err != nil {
+			http.Error(w, "500 internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write(resp)
 	default:
 		//Prevents the use of other request types
 		http.Error(w, "405 method not allowed", http.StatusMethodNotAllowed)

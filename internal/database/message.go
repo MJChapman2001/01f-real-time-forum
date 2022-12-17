@@ -46,9 +46,9 @@ func ConvertRowToMessage(rows *sql.Rows) ([]models.Message, error) {
 	}
 
 	//Returns an error if no rows are provided
-	if len(messages) == 0 {
-		return []models.Message{}, errors.New("no row provided")
-	}
+	// if len(messages) == 0 {
+	// 	return []models.Message{}, errors.New("no row provided")
+	// }
 
 	return messages, nil
 }

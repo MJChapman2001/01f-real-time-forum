@@ -4,7 +4,7 @@ package database
 const (
 	AddUser = `INSERT INTO users(username, firstname, surname, gender, email, dob, password) values(?, ?, ?, ?, ?, ?, ?)`
 	AddPost = `INSERT INTO posts(user_id, category, title, content, date, likes, dislikes) values(?, ?, ?, ?, ?, 0, 0)`
-	AddComment = `INSERT INTO comments(post_id, user_id, content, date, likes, dislikes) values(?, ?, ?, ?, 0, 0)`
+	AddComment = `INSERT INTO comments(post_id, user_id, content, date) values(?, ?, ?, ?)`
 	AddMessage = `INSERT INTO messages(sender_id, receiver_id, content, date) values(?, ?, ?, ?)`
 	AddLike = `INSERT INTO liked_posts(post_id, user_id) values(?, ?)`
 	AddDislike = `INSERT INTO disliked_posts(post_id, user_id) values(?, ?)`
@@ -16,7 +16,7 @@ const (
 	GetUserById = `SELECT * FROM users WHERE id = ?`
 	GetUserByUsername = `SELECT * FROM users WHERE username = ?`
 	GetUserByEmail = `SELECT * FROM users WHERE email = ?`
-	GetAllUser = `SELECT * FROM users`
+	GetAllUser = `SELECT * FROM users ORDER BY username ASC`
 	GetPostById = `SELECT * FROM posts WHERE id = ? ORDER BY id DESC`
 	GetAllPost = `SELECT * FROM posts ORDER BY id DESC`
 	GetAllPostByCategory = `SELECT * FROM posts WHERE category = ? ORDER BY id DESC`

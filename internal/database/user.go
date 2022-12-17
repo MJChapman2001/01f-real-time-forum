@@ -48,9 +48,9 @@ func ConvertRowToUser(rows *sql.Rows) ([]models.User, error){
 	}
 
 	//Returns an error if no rows are provided
-	if len(users) == 0 {
-		return []models.User{}, errors.New("no rows provided")
-	}
+	// if len(users) == 0 {
+	// 	return []models.User{}, errors.New("no rows provided")
+	// }
 
 	return users, nil
 }
