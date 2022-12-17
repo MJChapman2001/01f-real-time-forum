@@ -441,6 +441,8 @@ document.querySelector(".new-post-btn").addEventListener("click", function() {
     postsContainer.style.display = "none"
     postContainer.style.display = "none"
     createPostContainer.style.display = "flex"
+    topPanel.style.display = "none"
+
 })
 
 //Create new post
@@ -471,6 +473,7 @@ document.querySelector(".create-post-btn").addEventListener("click", function() 
 
         createPostContainer.style.display = "none"
         postsContainer.style.display = "flex"
+        
     })
 })
 
@@ -503,12 +506,21 @@ function sendComment() {
 }
 
 
-//Go back to home page when click on logo
-document.querySelector(".logo").addEventListener("click", function() {
+//Go back to home page when click on logo + back button
+document.querySelector(".logo").addEventListener("click", home)
+document.querySelector(".back").addEventListener("click", home)
+document.querySelector("#back-btn").addEventListener("click", home)
+
+async function home() {
     createPostContainer.style.display = "none"
     postContainer.style.display = "none"
     postsContainer.style.display = "flex"
-})
+    topPanel.style.display = "flex"
+
+    await getPosts()
+    createPosts(allPosts)
+
+}
 
 newPostNotif.addEventListener('click', async function() {
     

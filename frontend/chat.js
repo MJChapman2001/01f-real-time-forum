@@ -62,6 +62,8 @@ function OpenChat(rid, conn, data, currId) {
     document.querySelector("#send-btn").addEventListener("click", sendMsg)
     document.querySelector("#chat-input").addEventListener("keydown", function(event) {
         if (event.keyCode === 13) {
+            
+
             sendMsg(conn, rid, msg, 'msg');
 
             let resp = getData('http://localhost:8000/message?receiver='+rid)
