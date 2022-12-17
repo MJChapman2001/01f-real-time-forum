@@ -50,9 +50,15 @@ function sendMsg(conn, rid, msg, msg_type) {
     return false;
 };
 
+let ridStr
+
 function OpenChat(rid, conn, data, currId) {
-    console.log(allUsers[rid-1].username)
-    // document.querySelector(".user").style.fontWeight = "900"
+
+    ridStr = rid.toString();
+
+    document.getElementById('id'+ridStr).style.fontWeight = "400"
+
+
     document.querySelector(".chat-user-username").innerText = allUsers[rid-1].username
     document.querySelector(".chat-wrapper").style.display = "flex"
     var msg = document.getElementById("chat-input");
@@ -84,6 +90,7 @@ function OpenChat(rid, conn, data, currId) {
 // close chat
 document.querySelector(".close-chat").addEventListener("click", function() {
     document.querySelector(".chat-wrapper").style.display = "none"
-    // document.querySelector(".user").style.fontWeight = "400"
+    document.getElementById('id'+ridStr).style.fontWeight = "400"
 
+    
 })

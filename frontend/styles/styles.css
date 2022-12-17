@@ -51,8 +51,9 @@ body {
     /* height: 80vh; */
     width: 76%;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    flex-direction: column;
+    /* justify-content: space-between;
+    align-items: flex-end; */
     margin-bottom: 20px;
 }
 
@@ -103,6 +104,13 @@ body {
     margin-bottom: -5px;
 }
 
+.new-post-notif-wrapper {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
 .new-post-popup {
     /* padding-bottom: 10px; */
     /* border-bottom: 2px solid #000; */
@@ -112,8 +120,7 @@ body {
     border-radius: 20px;
     font-size: 0.8rem;
     position: fixed;
-    top: 100px;
-    display: none;
+    margin-bottom: 40px;
 }
 
 /* POSTS */
@@ -229,6 +236,11 @@ body {
 }
 .comments img {
     height: 21px;
+}
+
+.top-panel-nav {
+    display: flex;
+    justify-content: space-between;
 }
 
 .new-post-btn {

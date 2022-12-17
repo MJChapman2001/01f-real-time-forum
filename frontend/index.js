@@ -10,7 +10,7 @@ const onlineUsers = document.querySelector('.online-users');
 const offlineUsers = document.querySelector('.offline-users');
 const commentsContainer = document.querySelector('.comments-container');
 const topPanel = document.querySelector('.top-panel');
-const newPostNotif= document.querySelector('.new-post-popup');
+const newPostNotif= document.querySelector('.new-post-notif-wrapper');
 const msgNotif = document.querySelector(".msg-notification");
 
 
@@ -87,8 +87,14 @@ function startWS() {
 
         conn.onmessage = async function (evt) {
             newMsg = JSON.parse(evt.data)
+            console.log(newMsg)
             
             if (newMsg.msg_type == "msg") {
+                //If we count messages
+                // const msgNotif = document.querySelector(".msg-notification").style.opacity = "1"
+             
+                document.getElementById('id'+newMsg.sender_id).style.fontWeight = "900"
+
                 var senderContainer = document.createElement("div");
                 senderContainer.className = (newMsg.sender_id == currId) ? "sender-container": "receiver-container"
                 var sender = document.createElement("div");
@@ -104,7 +110,7 @@ function startWS() {
 
                 createUsers(allUsers, conn)
             } else if (newMsg.msg_type == "post") {
-                newPostNotif.style.display = "block"
+                newPostNotif.style.display = "flex"
             }
         };
     } else {
@@ -260,6 +266,7 @@ function createPosts(postdata) {
         
             postsContainer.style.display = "none"
             postContainer.style.display = "flex"
+            topPanel.style.display = "none"
         })
     })
 }
@@ -271,7 +278,7 @@ function createUsers(userdata, conn) {
     userdata.map(({id, username}) => {
         var user = document.createElement("div");
         user.className = "user"
-        user.setAttribute("id", id)
+        user.setAttribute("id", "id"+id)
 
         if (online.includes(id)) {
             onlineUsers.appendChild(user)
@@ -285,12 +292,19 @@ function createUsers(userdata, conn) {
         var chatusername = document.createElement("p");
         chatusername.innerText = username
         user.appendChild(chatusername)
+        var msgNotification = document.createElement("div");
+        msgNotification.className = "msg-notification"
+        msgNotification.innerText = 1
+        user.appendChild(msgNotification)
 
         user.addEventListener("click", function(e) {
             let resp = getData('http://localhost:8000/message?receiver='+id)
             resp.then(value => {
-                let rid = parseInt(user.getAttribute("id"))
-                document
+                // let rid = parseInt(user.getAttribute("id"))
+                let ridStr = user.getAttribute("id")
+                const regex = /id/i;
+                const rid = parseInt(ridStr.replace(regex, ''))
+                console.log("rid", rid)
                 OpenChat(rid, conn, value, currId)
             }).catch()
         })
@@ -442,6 +456,8 @@ document.querySelector(".new-post-btn").addEventListener("click", function() {
     postContainer.style.display = "none"
     createPostContainer.style.display = "flex"
     topPanel.style.display = "none"
+    const title = document.querySelector("#create-post-title").value = ""
+    const body = document.querySelector("#create-post-body").value = ""
 
 })
 
@@ -473,6 +489,7 @@ document.querySelector(".create-post-btn").addEventListener("click", function() 
 
         createPostContainer.style.display = "none"
         postsContainer.style.display = "flex"
+        topPanel.style.display = "flex"
         
     })
 })
@@ -516,6 +533,7 @@ async function home() {
     postContainer.style.display = "none"
     postsContainer.style.display = "flex"
     topPanel.style.display = "flex"
+    newPostNotif.style.display = "none"
 
     await getPosts()
     createPosts(allPosts)
