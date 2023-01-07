@@ -170,16 +170,23 @@ function createComments(commentsdata) {
         commentWrapper.className = "comment-wrapper"
         commentsContainer.appendChild(commentWrapper)
         var userImg = document.createElement("img");
-        userImg.src = "./frontend/assets/profile1.svg"
+        userImg.src = "./frontend/assets/profile7.svg"
         commentWrapper.appendChild(userImg)
         var comment = document.createElement("div");
         comment.className = "comment"
         commentWrapper.appendChild(comment)
-        var commentUser = document.createElement("div");
-        commentUser.className = "comment-username"
-        commentUser.innerText = allUsers[user_id-1].username
-        comment.appendChild(commentUser)
-        var commentSpan = document.createElement("span");
+        var commentUserWrapper = document.createElement("div");
+        commentUserWrapper.className = "comment-user-wrapper"
+        comment.appendChild(commentUserWrapper)
+        var commentUsername = document.createElement("div");
+        commentUsername.className = "comment-username"
+        commentUsername.innerText = allUsers[user_id-1].username
+        commentUserWrapper.appendChild(commentUsername)
+        var commentDate = document.createElement("div");
+        commentDate.className = "comment-date"
+        commentDate.innerHTML = date
+        commentUserWrapper.appendChild(commentDate)
+        var commentSpan = document.createElement("div");
         commentSpan.innerHTML = content
         comment.appendChild(commentSpan)
     })
@@ -280,6 +287,8 @@ function createUsers(userdata, conn) {
         user.className = "user"
         user.setAttribute("id", "id"+id)
 
+        if (id !== currId) {
+
         if (online.includes(id)) {
             onlineUsers.appendChild(user)
         } else {
@@ -296,6 +305,7 @@ function createUsers(userdata, conn) {
         msgNotification.className = "msg-notification"
         msgNotification.innerText = 1
         user.appendChild(msgNotification)
+    }
 
         user.addEventListener("click", function(e) {
             let resp = getData('http://localhost:8000/message?receiver='+id)
@@ -545,6 +555,7 @@ newPostNotif.addEventListener('click', async function() {
     await getPosts()
     createPosts(allPosts)
     newPostNotif.style.display = "none"
+    window.scrollTo(0, 0);
 });
 
 function closeWS() {

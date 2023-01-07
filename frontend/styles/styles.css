@@ -255,6 +255,7 @@ body {
 
 .users {
     margin-top: 70px;
+    margin-left: 50px;
     /* height: 70vh;
     overflow: scroll; */
     
@@ -453,11 +454,9 @@ body {
 
 .comment-date {
     font-size: .8rem;
-    color: #292929;
+    color: #707070;
    
 }
-
-
 
 /* CHAT */
 

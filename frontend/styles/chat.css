@@ -89,6 +89,19 @@
     color: rgb(141, 141, 141);
 }
 
+/* .sender-username {
+    position: absolute;
+    margin-top: -39px;
+    margin-left: -12px;
+    font-size: 0.75rem;
+    color: rgb(47, 46, 46);
+    background-color: rgb(255, 254, 207);
+
+    padding: 8px;
+    border: black solid 2px;
+    border-radius: 20px;
+} */
+
 .chat-time {
     position: absolute;
     bottom: 5px;
