@@ -13,6 +13,8 @@ const topPanel = document.querySelector('.top-panel');
 const newPostNotif= document.querySelector('.new-post-notif-wrapper');
 const msgNotif = document.querySelector(".msg-notification");
 
+let counter = 0
+
 
 var conn;
 var currId = 0
@@ -88,10 +90,15 @@ function startWS() {
         conn.onmessage = async function (evt) {
             newMsg = JSON.parse(evt.data)
             console.log(newMsg)
+
+            // let newDate = newMsg.date.slice(0, -3)
+            // console.log(newDate)
             
             if (newMsg.msg_type == "msg") {
-                //If we count messages
-                // const msgNotif = document.querySelector(".msg-notification").style.opacity = "1"
+                counter += 1
+                const msgNotif =  document.getElementById('id'+newMsg.sender_id).querySelector('.msg-notification');
+                msgNotif.style.opacity = "1"
+                msgNotif.innerText = counter
              
                 document.getElementById('id'+newMsg.sender_id).style.fontWeight = "900"
 
@@ -315,6 +322,8 @@ function createUsers(userdata, conn) {
                 const regex = /id/i;
                 const rid = parseInt(ridStr.replace(regex, ''))
                 console.log("rid", rid)
+                counter = 0
+                document.querySelector(".msg-notification").style.opacity = "0"
                 OpenChat(rid, conn, value, currId)
             }).catch()
         })
@@ -544,6 +553,9 @@ async function home() {
     postsContainer.style.display = "flex"
     topPanel.style.display = "flex"
     newPostNotif.style.display = "none"
+
+    selectCategories = document.getElementById("categories");
+    selectCategories.selectedIndex = 0;
 
     await getPosts()
     createPosts(allPosts)

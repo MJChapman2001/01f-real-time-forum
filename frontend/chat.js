@@ -18,6 +18,12 @@ function CreateMessages(data, currId) {
         var receiver = document.createElement("div");
         receiver.className = (sender_id == currId) ? "sender": "receiver"
         receiver.innerText = content
+        // 
+        // var username = document.createElement("div");
+        // username.className = "sender-username";
+        // username.innerText = "maddie"
+        // receiver.appendChild(username);
+        // 
         var messagedate = document.createElement("div");
         messagedate.className = "chat-time"
         messagedate.innerText = date
@@ -57,6 +63,7 @@ function OpenChat(rid, conn, data, currId) {
     ridStr = rid.toString();
 
     document.getElementById('id'+ridStr).style.fontWeight = "400"
+    
 
 
     document.querySelector(".chat-user-username").innerText = allUsers[rid-1].username
