@@ -72,6 +72,11 @@ async function getComments(post_id) {
     })
 }
 
+function updateUsers(user_id) {
+    online.sort(function(x, y) {return x == user_id ? -1 : y == user_id ? 1 : 0})
+    createUsers()
+}
+
 function startWS() {
     if (window["WebSocket"]) {
         conn = new WebSocket("ws://" + document.location.host + "/ws");
@@ -94,13 +99,17 @@ function startWS() {
                 date.className = "chat-time"
                 date.innerText = newMsg.date
                 appendLog(senderContainer, sender, date);
+
+                updateUsers((newMsg.sender_id == currId) ? newMsg.receiver_id : newMsg.sender_id)
             } else if (newMsg.msg_type == "online") {
                 online = newMsg.user_ids
                 await getUsers()
 
                 createUsers(allUsers, conn)
             } else if (newMsg.msg_type == "post") {
-                console.log("New Post")
+                // await getPosts()
+
+                // createPosts()
             }
         };
     } else {
@@ -265,6 +274,10 @@ function createUsers(userdata, conn) {
     offlineUsers.innerHTML = ""
 
     userdata.map(({id, username}) => {
+        if (id == currId) {
+            return
+        }
+
         var user = document.createElement("div");
         user.className = "user"
         user.setAttribute("id", id)
