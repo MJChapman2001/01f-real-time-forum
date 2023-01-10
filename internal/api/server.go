@@ -1,15 +1,15 @@
 package api
 
 import (
+	"fmt"
 	"log"
 	"net/http"
-
 	"real-time-forum/internal/chat"
 	"real-time-forum/internal/config"
 	"real-time-forum/internal/database"
 )
 
-//Sets up the router with endpoints and starts the server
+// Sets up the router with endpoints and starts the server
 func StartServer() {
 	database.InitDB(config.Path)
 
@@ -32,6 +32,8 @@ func StartServer() {
 	mux.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		chat.ServeWs(hub, w, r)
 	})
+
+	fmt.Println("server running")
 
 	if err := http.ListenAndServe(":8000", mux); err != nil {
 		log.Fatal(err)

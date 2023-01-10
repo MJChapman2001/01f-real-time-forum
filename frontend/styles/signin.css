@@ -1,16 +1,10 @@
 
-.signin-container {
-    display: block;
-    width: 50%;
-    min-width: 200px;
-    margin: auto;
-    margin-top: 10%;
-}
-
 .signin {
     width: 50%;
+    max-width: 350px;
     min-width: 200px;
     margin: auto;
+    padding-bottom: 100px;
     display: flex;
     flex-direction: column;
    
@@ -22,6 +16,7 @@
     color: #000000;
     margin-bottom: 4px;
     margin-left: 8px;
+    margin-top: 8px;
     
 }
 

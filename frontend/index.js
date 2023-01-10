@@ -3,7 +3,7 @@ const createPostContainer = document.querySelector(".create-post-container");
 const postContainer = document.querySelector(".post-container");
 const contentWrapper = document.querySelector('.content-wrapper');
 const registerContainer = document.querySelector('.register-container');
-const signinContainer = document.querySelector('.signin-container');
+const signinContainer = document.querySelector('.signin');
 const signupNav = document.querySelector('.signup-nav');
 const logoutNav = document.querySelector('.logout-nav');
 const onlineUsers = document.querySelector('.online-users');
@@ -403,7 +403,7 @@ document.querySelector('#signup-link').addEventListener('click', function() {
     registerContainer.style.display = "block"
 })
 document.querySelector('#signin-link').addEventListener('click', function() {
-    signinContainer.style.display = "block"
+    signinContainer.style.display = "flex"
     registerContainer.style.display = "none"
 })
 
@@ -416,7 +416,7 @@ signupBtn.addEventListener("click", function() {
         registerContainer.style.display = "block"
     } else {
         signupBtn.innerText = "SIGN UP";
-        signinContainer.style.display = "block"
+        signinContainer.style.display = "flex"
         registerContainer.style.display = "none"
     }
 })
