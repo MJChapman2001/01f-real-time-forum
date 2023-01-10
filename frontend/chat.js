@@ -26,6 +26,7 @@ function CreateMessages(data, currId) {
 }
 
 function sendMsg(conn, rid, msg, msg_type) {
+    console.log(rid)
     if (!conn) {
         return false;
     }
@@ -47,17 +48,36 @@ function sendMsg(conn, rid, msg, msg_type) {
 
     conn.send(JSON.stringify(msgData))
     msg.value = "";
+    updateUsers()
     return false;
 };
+
 // open chat when click on user
 function OpenChat(rid, conn, data, currId) {
     // document.querySelector(".user").style.fontWeight = "900"
+    // document.querySelector(".chat-wrapper").style.display = "flex"
+    document.getElementById('id'+rid).style.fontWeight = "400"
+    
+    for (var i = 0; i < unread.length; i++) {
+        if (unread[i][0] == rid) {
+            unread[i][1] = 0
+            // createUsers(allUsers, conn)
+        }
+    }
+
+    let oldElem = document.querySelector(".send-wrapper")
+    let newElem = oldElem.cloneNode(true)
+    oldElem.parentNode.replaceChild(newElem, oldElem)
+
+    document.querySelector(".chat-user-username").innerText = allUsers.filter(u => {return u.id == rid})[0].username
     document.querySelector(".chat-wrapper").style.display = "flex"
     var msg = document.getElementById("chat-input");
 
     log.innerHTML = ""
 
-    document.querySelector("#send-btn").addEventListener("click", sendMsg)
+    document.querySelector("#send-btn").addEventListener("click", function() {
+        sendMsg(conn, rid, msg, 'msg')
+    })
     document.querySelector("#chat-input").addEventListener("keydown", function(event) {
         if (event.keyCode === 13) {
             sendMsg(conn, rid, msg, 'msg');
@@ -81,5 +101,4 @@ function OpenChat(rid, conn, data, currId) {
 document.querySelector(".close-chat").addEventListener("click", function() {
     document.querySelector(".chat-wrapper").style.display = "none"
     // document.querySelector(".user").style.fontWeight = "400"
-
 })

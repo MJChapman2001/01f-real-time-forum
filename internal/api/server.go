@@ -29,6 +29,7 @@ func StartServer() {
 	mux.HandleFunc("/message", MessageHandler)
 	mux.HandleFunc("/comment", CommentHandler)
 	mux.HandleFunc("/like", LikeHandler)
+	mux.HandleFunc("/chat", ChatHandler)
 	mux.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		chat.ServeWs(hub, w, r)
 	})

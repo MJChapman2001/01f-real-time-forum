@@ -1,14 +1,15 @@
 
 .chat-wrapper {
     position: fixed;
-    z-index: 1; 
+    z-index: 999; 
     right: 0;
     bottom: 0;
-    margin-right: 10%; 
-    margin-bottom: 5%;
-    max-width: 400px;
-    min-width: 300px;
-    height: 65%;
+    margin-right: 20px; 
+    margin-bottom: 20px;
+    /* max-width: 400px;
+    min-width: 300px; */
+    height: 450px;
+    width: 350px;
     background-color: rgba(255, 255, 255, 1);
     border: black solid 2px;
     border-radius: 20px;
@@ -19,7 +20,7 @@
 }
 
 .chat-username-wrapper {
-    border-bottom: black solid 2px;
+    border-bottom: black solid 1.5px;
     /* background-color: rgba(255, 255, 255, 1); */
     top: 0;
     height: 60px;
@@ -34,8 +35,9 @@
 .chat-user {
     display: flex;
     gap: 20px;
-
+    align-items: center;
 }
+
 .chat {
     flex: 1;
     overflow: scroll;
@@ -47,13 +49,7 @@
 .sender-container {
     width: 100%;
     height: fit-content;
-
-}
-
-.sender-container {
-    width: 100%;
-    height: fit-content;
-    padding: 15px;
+    padding: 10px;
     position: relative;
     display: flex;
     justify-content: end;
@@ -63,7 +59,7 @@
 .receiver-container {
     width: 100%;
     height: fit-content;
-    padding: 15px;
+    padding: 10px;
     position: relative;
     display: flex;
 }
@@ -72,24 +68,54 @@
 .sender, .receiver {
     height: fit-content;
     width: fit-content;
+    min-width: 150px;
+    max-width: 200px;
     padding: 10px;
-    background-color: rgba(241, 239, 234, 0.642);
-
-    border: black solid 2px;
+    /* background-color: rgba(241, 239, 234, 0.642); */
+    border: black solid 1.5px;
     border-radius: 10px;
+    /* padding-top: 20px; */
     padding-bottom: 22px;
-    padding-right: 40px;
+    padding-right: 20px;
     position: inherit;
     margin-bottom: 5px;
     margin-top: 5px;
+
   
 }
 
-.sender-username {
+.sender {
+    border-radius: 10px 10px 0px 10px;
+    background-color: rgba(249, 248, 210, 0.508);
+
+
+}
+
+.receiver {
+    border-radius: 10px 10px 10px 0px;
+    background-color: rgba(248, 247, 244, 0.642);
+
+    /* background-color:rgba(241, 239, 234, 0.637); */
+}
+
+/* .sender-username {
     position: absolute;
     margin-top: -25px;
     font-size: 0.75rem;
     color: rgb(141, 141, 141);
+} */
+
+.sender-username {
+    position: absolute;
+    margin-top: -59px;
+    margin-left: -12px;
+    font-size: 0.75rem;
+    color: rgb(47, 46, 46);
+    background-color: rgb(255, 254, 207);
+
+    padding: 8px;
+    border: black solid 2px;
+    border-radius: 20px;
 }
 
 .chat-time {
@@ -97,8 +123,7 @@
     bottom: 5px;
     right: 8px;;
     color: rgb(147, 147, 147);
-    font-size: .8em;
-    
+    font-size: .8em;    
 }
 
 .chat-date-wrapper {
@@ -128,7 +153,7 @@
     border-radius: 25px;
     padding-left: 20px;
     background-color: rgba(255, 255, 255, 1);
-    border: black solid 2px;
+    border: black solid 1.5px;
 
     margin-left: 20px;
 }
@@ -146,6 +171,3 @@
     align-items: center;
     margin-left: -50px;
 }
-
-
-

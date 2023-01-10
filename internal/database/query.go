@@ -9,6 +9,7 @@ const (
 	AddLike = `INSERT INTO liked_posts(post_id, user_id) values(?, ?)`
 	AddDislike = `INSERT INTO disliked_posts(post_id, user_id) values(?, ?)`
 	AddSession = `INSERT INTO sessions(session_uuid, user_id) values(?, ?)`
+	AddChat = `INSERT INTO chats(id_one, id_two, time) values(? ,?, ?)`
 )
 
 //Query statements to filter data from the database
@@ -28,9 +29,11 @@ const (
 	GetAllChatMessage = `SELECT * FROM messages WHERE sender_id = ? AND receiver_id = ? OR sender_id = ? AND receiver_id = ?`
 	GetPostLikes = `SELECT users.* FROM liked_posts INNER JOIN users ON liked_posts.user_id = users.id WHERE liked_posts.post_id = ?`
 	GetUserLikes = `SELECT posts.* FROM liked_posts INNER JOIN posts ON liked_posts.post_id = posts.id WHERE liked_posts.user_id = ? ORDER BY id DESC`
-	GetPostDislikes = `SELECT users.* FROM diliked_posts INNER JOIN users ON disliked_posts.user_id = users.id WHERE disliked_posts.post_id = ?`
+	GetPostDislikes = `SELECT users.* FROM disliked_posts INNER JOIN users ON disliked_posts.user_id = users.id WHERE disliked_posts.post_id = ?`
 	GetUserDislikes = `SELECT posts.* FROM disliked_posts INNER JOIN posts ON disliked_posts.post_id = posts.id WHERE disliked_posts.user_id = ? ORDER BY id DESC`
 	GetSessionUser = `SELECT users.* FROM sessions INNER JOIN users ON sessions.user_id = users.id WHERE sessions.session_uuid = ?`
+	GetUserChats = `SELECT * FROM chats WHERE id_one = ? OR id_two = ? ORDER BY time DESC`
+	GetChatBetween = `SELECT * FROM chats WHERE id_one = ? AND id_two = ? OR id_one = ? AND id_two = ?`
 )
 
 //Query statements to remove data from database
@@ -44,4 +47,5 @@ const (
 const (
 	UpdateLike = `UPDATE posts SET likes = ? WHERE id = ?`
 	UpdateDislike = `UPDATE posts SET dislikes = ? WHERE id = ?`
+	UpdateChat = `UPDATE chats SET time = ? WHERE id_one = ? AND id_two = ?`
 )

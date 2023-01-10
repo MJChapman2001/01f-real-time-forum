@@ -24,6 +24,11 @@ func NewMessage(path string, m models.Message) error {
 		return err
 	}
 
+	err = UpdateChatTime(m.Sender_id, m.Receiver_id, db)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -24,9 +24,9 @@
     <div class="logout-nav">
         <div class="logo">Forum.com</div>
         <div class="nav-right">
-            <div class="profile">maddiewesst</div>
+            <div class="profile"></div>
             <button class="logout-btn">
-                <img src="./frontend/assets/signout.svg" alt="" class="src">
+                <img src="./frontend/assets/signout2.svg" alt="" class="src">
             </button>
         </div>
     </div>
@@ -114,24 +114,39 @@
     </div>
 
     <div class="content-wrapper">
+
         <!-- mid section -->
         <div class="mid-section">
             <!-- top panel -->
             <div class="top-panel">
-                <div class="filter-categories">
-                    <select name="categories" id="categories">
-                        <option value="all">All posts</option>
-                        <option value="go">Go</option>
-                        <option value="javascript">Javascript</option>
-                        <option value="rust">Rust</option>
-                    </select>
+                <div class="new-post-notif-wrapper">
+                    <div class="new-post-popup link">
+                        new post
+                    </div>
                 </div>
-                <button type="button" class="new-post-btn">
-                    <img src="./frontend/assets/pluscircle.svg">
-                </button>
+                <div class="top-panel-nav">
+
+                    <div class="filter-categories">
+                        <select name="categories" id="categories">
+                            <option value="all">All posts</option>
+                            <option value="go">Go</option>
+                            <option value="javascript">Javascript</option>
+                            <option value="rust">Rust</option>
+                        </select>
+                    </div>
+                    <button type="button" class="new-post-btn">
+                        <img src="./frontend/assets/pluscircle.svg">
+                    </button>
+                </div>
             </div>
             <!-- main page -->
             <div class="posts-container">
+                <div class="new-post-notif-wrapper">
+                    <div class="new-post-popup link">
+                        new posts
+                    </div>
+                </div>
+
                 <!-- <div class="post" id="1">
                     <div class="title">This is a title</div>
                     <div class="author">
@@ -172,6 +187,10 @@
             </div>
             <!-- create post -->
             <div class="create-post-container">
+                <div class="back">
+
+                    <img src="./frontend/assets/back-arrow.svg">
+                </div>
                 <div class="create-title">
                     <input id="create-post-title" type="text" placeholder="Title..." />
                 </div>
@@ -186,17 +205,20 @@
                 </button>
             </div>
             <!-- post page -->
+
             <div class="post-container">
+                <div class="back" id="back-btn">
+
+                    <img src="./frontend/assets/back-arrow.svg">
+                </div>
                 <div class="post-wrapper">
                     <div class="space-between">
                         <div class="title" id="title">This is a title</div>
                         <div class="category">JavaScript</div>
                     </div>
-
-
                     <div class="author" id="author-post">
                         <div class="left">
-                            <img src="./frontend/assets/profile1.svg" alt="profile-pic">
+                            <img src="./frontend/assets/profile7.svg" alt="profile-pic">
                             <div class="post-username" id="username">maddiewesst</div>
                             <div class="date" id="date">22 November 2022</div>
                         </div>
@@ -210,17 +232,17 @@
                     <div class="comments-wrapper">
                         <div class="likes-dislikes-wrapper">
                             <div class="likes-wrapper">
-                                <img src="./frontend/assets/like3.svg" alt="" class="src">
-                                <div class="likes">2</div>
+                                <img src="./frontend/assets/like3.svg" alt="" class="src" id="like-btn">
+                                <div class="likes" id="post-likes"></div>
                             </div>
                             <div class="likes-wrapper">
-                                <img src="./frontend/assets/dislike4.svg" alt="" class="src">
-                                <div class="dislike">0</div>
+                                <img src="./frontend/assets/dislike4.svg" alt="" class="src" id="dislike-btn">
+                                <div class="dislike" id="post-dislikes"></div>
                             </div>
                         </div>
                         <div class="comments">
                             <img src="./frontend/assets/comment.svg" alt="">
-                            <div class="comment">3 comments</div>
+                            <div class="comment" id="post-comments"></div>
                         </div>
                     </div>
                 </div>
@@ -248,13 +270,13 @@
             <div class="chat-wrapper">
                 <div class="chat-username-wrapper">
                     <div class="chat-user">
-                        <img src="./frontend/assets/profile4.svg" />
-                        <p>username</p>
+                        <img src="./frontend/assets/profile7.svg" />
+                        <div class="chat-user-username"></div>
                     </div>
                     <div class="close-chat link">X</div>
                 </div>
                 <div class="chat">
-                    <div class="sender-container">
+                    <!-- <div class="sender-container">
                         <div class="sender">
                             <div class="sender-username">Maddie</div>
                             <div class="chat-msg">Curab</div>
@@ -273,7 +295,7 @@
                         <div class="chat-date">
                             22 November 2022
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="send-wrapper">
                     <input type="text" id="chat-input" placeholder="Start typing...">
@@ -286,16 +308,19 @@
         <!--  right panel -->
         <div class="right-panel">
             <div class="users">
-                <p>Online</p>
+                <p class="online-list">Online</p>
                 <div class="online-users"></div>
-                <p>Offline</p>
+                <p class="online-list">Offline</p>
                 <div class="offline-users"></div>
                 <!-- <div class="user">
+
                     <img src="./frontend/assets/profile4.svg" />
+                    <div class="online"></div>
+
                     <p>username</p>
                     <span class="msg-notification">1</span>
-                </div>
-                <div class="user">
+                </div> -->
+                <!-- <div class="user">
                     <img src="./frontend/assets/profile4.svg" />
                     <p>username</p>
                 </div>

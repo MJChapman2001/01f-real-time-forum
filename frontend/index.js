@@ -9,6 +9,12 @@ const logoutNav = document.querySelector('.logout-nav');
 const onlineUsers = document.querySelector('.online-users');
 const offlineUsers = document.querySelector('.offline-users');
 const commentsContainer = document.querySelector('.comments-container');
+const topPanel = document.querySelector('.top-panel');
+const newPostNotif= document.querySelector('.new-post-notif-wrapper');
+const msgNotif = document.querySelector(".msg-notification");
+
+let counter = 0
+var unread = []
 
 var conn;
 var currId = 0
@@ -32,6 +38,7 @@ async function postData(url = '', data = {}) {
         },
         body: JSON.stringify(data)
     })
+    console.log('posted')
 
     return response.json()
 }
@@ -72,9 +79,25 @@ async function getComments(post_id) {
     })
 }
 
-function updateUsers(user_id) {
-    online.sort(function(x, y) {return x == user_id ? -1 : y == user_id ? 1 : 0})
-    createUsers()
+async function updateUsers() {
+    await getData('http://localhost:8000/chat?user_id='+currId)
+    .then(value => {
+        var newUsers = []
+
+        if (value.user_ids != null) {
+            newUsers = value.user_ids.map((i) => {
+                return allUsers.filter(u => {return u.id == i})[0]
+            })
+        }
+
+        let otherUsers = allUsers.filter(x => !newUsers.includes(x))
+
+        allUsers = newUsers.concat(otherUsers)
+
+        createUsers(allUsers, conn)
+    }).catch(err => {
+        console.log(err)
+    })
 }
 
 function startWS() {
@@ -88,6 +111,10 @@ function startWS() {
 
         conn.onmessage = async function (evt) {
             newMsg = JSON.parse(evt.data)
+            console.log(newMsg)
+
+            // let newDate = newMsg.date.slice(0, -3)
+            // console.log(newDate)
             
             if (newMsg.msg_type == "msg") {
                 var senderContainer = document.createElement("div");
@@ -100,16 +127,29 @@ function startWS() {
                 date.innerText = newMsg.date
                 appendLog(senderContainer, sender, date);
 
-                updateUsers((newMsg.sender_id == currId) ? newMsg.receiver_id : newMsg.sender_id)
+                if (newMsg.sender_id == currId) {
+                    return
+                }
+
+                let unreadMsgs = unread.filter((u) => {
+                    id = newMsg.sender_id
+                    return u[0] == id
+                })
+
+                if (unreadMsgs.length === 0) {
+                    unread.push([newMsg.sender_id, 1])
+                } else {
+                    unreadMsgs[0][1] += 1
+                }
+
+                updateUsers()
             } else if (newMsg.msg_type == "online") {
                 online = newMsg.user_ids
                 await getUsers()
 
-                createUsers(allUsers, conn)
+                updateUsers()
             } else if (newMsg.msg_type == "post") {
-                // await getPosts()
-
-                // createPosts()
+                newPostNotif.style.display = "flex"
             }
         };
     } else {
@@ -134,11 +174,11 @@ window.addEventListener('DOMContentLoaded', async function() {
         contentWrapper.style.display = "flex"  
         logoutNav.style.display = "flex"
 
-        document.querySelector('.profile').innerHTML = currUsername
+        document.querySelector('.profile').innerText = currUsername
         startWS()
 
         createPosts(allPosts)
-        createUsers(allUsers, conn)
+        updateUsers()
     }).catch(() => {
         signinContainer.style.display = "flex"
         signupNav.style.display = "flex"
@@ -154,6 +194,8 @@ function createPost(postdata) {
     document.querySelector('#date').innerHTML = postdata.date
     document.querySelector('.category').innerHTML = postdata.category
     document.querySelector('.full-content').innerHTML = postdata.content
+    document.getElementById('post-likes').innerHTML = postdata.likes
+    document.getElementById('post-dislikes').innerHTML = postdata.dislikes
 }
 
 function createComments(commentsdata) {
@@ -169,16 +211,23 @@ function createComments(commentsdata) {
         commentWrapper.className = "comment-wrapper"
         commentsContainer.appendChild(commentWrapper)
         var userImg = document.createElement("img");
-        userImg.src = "./frontend/assets/profile1.svg"
+        userImg.src = "./frontend/assets/profile7.svg"
         commentWrapper.appendChild(userImg)
         var comment = document.createElement("div");
         comment.className = "comment"
         commentWrapper.appendChild(comment)
-        var commentUser = document.createElement("div");
-        commentUser.className = "comment-username"
-        commentUser.innerText = allUsers[user_id-1].username
-        comment.appendChild(commentUser)
-        var commentSpan = document.createElement("span");
+        var commentUserWrapper = document.createElement("div");
+        commentUserWrapper.className = "comment-user-wrapper"
+        comment.appendChild(commentUserWrapper)
+        var commentUsername = document.createElement("div");
+        commentUsername.className = "comment-username"
+        commentUsername.innerText = allUsers.filter(u => {return u.id == user_id})[0].username
+        commentUserWrapper.appendChild(commentUsername)
+        var commentDate = document.createElement("div");
+        commentDate.className = "comment-date"
+        commentDate.innerHTML = date
+        commentUserWrapper.appendChild(commentDate)
+        var commentSpan = document.createElement("div");
         commentSpan.innerHTML = content
         comment.appendChild(commentSpan)
     })
@@ -191,7 +240,9 @@ function createPosts(postdata) {
         return
     }
 
-    postdata.map(({id, user_id, category, title, content, date, likes, dislikes}) => {
+    postdata.map(async ({id, user_id, category, title, content, date, likes, dislikes}) => {
+        await getComments(id)
+
         var post = document.createElement("div");
         post.className = "post"
         post.setAttribute("id", id)
@@ -208,7 +259,7 @@ function createPosts(postdata) {
         author.appendChild(img)
         var user = document.createElement("div");
         user.className = "post-username"
-        user.innerHTML = allUsers[user_id-1].username
+        user.innerHTML = allUsers.filter(u => {return u.id == user_id})[0].username
         author.appendChild(user)
         var postdate = document.createElement("div");
         postdate.className = "date"
@@ -252,19 +303,21 @@ function createPosts(postdata) {
         comments.appendChild(commentsImg)
         var comment = document.createElement("div");
         comment.className = "comment"
-        comment.innerText = "3" + " Comments"
+        comment.innerText = (currComments === null) ? "0 Comments" : currComments.length + " Comments"
         comments.appendChild(comment)
 
         post.addEventListener("click", async function(e) {
-            currPost = parseInt(e.target.getAttribute("id"))
+            currPost = parseInt(post.getAttribute("id"))
 
             await getComments(currPost)
 
-            createPost(allPosts[allPosts.length-currPost])
+            createPost(allPosts.filter(p => {return p.id == currPost})[0])
             createComments(currComments)
+            document.getElementById('post-comments').innerHTML = (currComments === null) ? "0 Comments" : currComments.length + " Comments"
         
             postsContainer.style.display = "none"
             postContainer.style.display = "flex"
+            topPanel.style.display = "none"
         })
     })
 }
@@ -280,7 +333,7 @@ function createUsers(userdata, conn) {
 
         var user = document.createElement("div");
         user.className = "user"
-        user.setAttribute("id", id)
+        user.setAttribute("id", ('id'+id))
 
         if (online.includes(id)) {
             onlineUsers.appendChild(user)
@@ -294,11 +347,33 @@ function createUsers(userdata, conn) {
         var chatusername = document.createElement("p");
         chatusername.innerText = username
         user.appendChild(chatusername)
+        var msgNotification = document.createElement("div");
+        msgNotification.className = "msg-notification"
+        msgNotification.innerText = 1
+        user.appendChild(msgNotification)
+
+        let unreadMsgs = unread.filter((u) => {
+            return u[0] == id
+        })
+
+        if (unreadMsgs.length != 0 && unreadMsgs[0][1] != 0) {
+            const msgNotif =  document.getElementById('id'+id).querySelector('.msg-notification');
+            msgNotif.style.opacity = "1"
+            msgNotif.innerText = unreadMsgs[0][1]
+            
+            document.getElementById('id'+id).style.fontWeight = "900"
+        } 
 
         user.addEventListener("click", function(e) {
             let resp = getData('http://localhost:8000/message?receiver='+id)
             resp.then(value => {
-                let rid = parseInt(user.getAttribute("id"))
+                // let rid = parseInt(user.getAttribute("id"))
+                let ridStr = user.getAttribute("id")
+                const regex = /id/i;
+                const rid = parseInt(ridStr.replace(regex, ''))
+                console.log("rid", rid)
+                counter = 0
+                document.getElementById('id'+id).querySelector(".msg-notification").style.opacity = "0"
                 OpenChat(rid, conn, value, currId)
             }).catch()
         })
@@ -335,10 +410,26 @@ document.getElementById("categories").onchange = function () {
     createPosts(filteredPosts)
 }
 
+document.getElementById("like-btn").addEventListener("click", () => {
+    let resp = postData('http://localhost:8000/like?post_id='+currPost+'&col=likes')
+    resp.then(value => {
+        let vals = value.msg.split("|")
+        document.getElementById('post-likes').innerHTML = parseInt(vals[0])
+        document.getElementById('post-dislikes').innerHTML = parseInt(vals[1])
+    }).catch()
+})
+
+document.getElementById("dislike-btn").addEventListener("click", () => {
+    let resp = postData('http://localhost:8000/like?post_id='+currPost+'&col=dislikes')
+    resp.then(value => {
+        let vals = value.msg.split("|")
+        document.getElementById('post-likes').innerHTML = parseInt(vals[0])
+        document.getElementById('post-dislikes').innerHTML = parseInt(vals[1])
+    }).catch()
+})
+
 //Sign in
 document.querySelector('.signin-btn').addEventListener("click", async function() {
-    document.querySelector('.profile').innerHTML = currUsername
-
     await getPosts()
     await getUsers()
 
@@ -356,6 +447,8 @@ document.querySelector('.signin-btn').addEventListener("click", async function()
         currId = parseInt(vals[0])
         currUsername = vals[1]
 
+        document.querySelector('.profile').innerText = currUsername
+
         signinContainer.style.display = "none"
         signupNav.style.display = "none"
         contentWrapper.style.display = "flex"
@@ -367,7 +460,7 @@ document.querySelector('.signin-btn').addEventListener("click", async function()
         startWS()
 
         createPosts(allPosts)
-        createUsers(allUsers, conn)
+        updateUsers()
     })
 })
 
@@ -376,6 +469,7 @@ document.querySelector('#signup-link').addEventListener('click', function() {
     signinContainer.style.display = "none"
     registerContainer.style.display = "block"
 })
+
 document.querySelector('#signin-link').addEventListener('click', function() {
     signinContainer.style.display = "block"
     registerContainer.style.display = "none"
@@ -448,6 +542,10 @@ document.querySelector(".new-post-btn").addEventListener("click", function() {
     postsContainer.style.display = "none"
     postContainer.style.display = "none"
     createPostContainer.style.display = "flex"
+    topPanel.style.display = "none"
+    const title = document.querySelector("#create-post-title").value = ""
+    const body = document.querySelector("#create-post-body").value = ""
+
 })
 
 //Create new post
@@ -478,6 +576,8 @@ document.querySelector(".create-post-btn").addEventListener("click", function() 
 
         createPostContainer.style.display = "none"
         postsContainer.style.display = "flex"
+        topPanel.style.display = "flex"
+        
     })
 })
 
@@ -505,17 +605,38 @@ function sendComment() {
         document.querySelector("#comment-input").value = ""
 
         await getComments(currPost)
+        document.getElementById('post-comments').innerHTML = (currComments === null) ? "0 Comments" : currComments.length + " Comments"
         createComments(currComments)
     })
 }
 
 
-//Go back to home page when click on logo
-document.querySelector(".logo").addEventListener("click", function() {
+//Go back to home page when click on logo + back button
+document.querySelector(".logo").addEventListener("click", home)
+document.querySelector(".back").addEventListener("click", home)
+document.querySelector("#back-btn").addEventListener("click", home)
+
+async function home() {
+    selectCategories = document.getElementById("categories");
+    selectCategories.selectedIndex = 0;
+
+    await getPosts()
+    createPosts(allPosts)
+
     createPostContainer.style.display = "none"
     postContainer.style.display = "none"
     postsContainer.style.display = "flex"
-})
+    topPanel.style.display = "flex"
+    newPostNotif.style.display = "none"
+}
+
+newPostNotif.addEventListener('click', async function() {
+    
+    await getPosts()
+    createPosts(allPosts)
+    newPostNotif.style.display = "none"
+    window.scrollTo(0, 0);
+});
 
 function closeWS() {
     if (conn.readyState === WebSocket.OPEN) {
