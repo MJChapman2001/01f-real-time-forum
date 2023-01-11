@@ -327,6 +327,7 @@ body {
 .post-container {
     width: 50%;
     min-width: 400px;
+    max-width: 600px;
     margin-left: 100px;
     display: none;
     flex-direction: column;

@@ -12,6 +12,8 @@ function appendLog(container, msg, date) {
 }
 
 function CreateMessages(data, currId) {
+    log.innerHTML = ""
+
     data.map(({sender_id, content, date}) => {
         var receiverContainer = document.createElement("div");
         receiverContainer.className = (sender_id == currId) ? "sender-container": "receiver-container"
@@ -77,6 +79,10 @@ function OpenChat(rid, conn, data, currId) {
 
     document.querySelector("#send-btn").addEventListener("click", function() {
         sendMsg(conn, rid, msg, 'msg')
+        let resp = getData('http://localhost:8000/message?receiver='+rid)
+        resp.then(value => {
+            CreateMessages(value, currId)
+        }).catch()
     })
     document.querySelector("#chat-input").addEventListener("keydown", function(event) {
         if (event.keyCode === 13) {

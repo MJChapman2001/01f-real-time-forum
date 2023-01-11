@@ -133,10 +133,12 @@ function startWS() {
                     return u[0] == id
                 })
 
-                if (unreadMsgs.length === 0) {
-                    unread.push([newMsg.sender_id, 1])
-                } else {
-                    unreadMsgs[0][1] += 1
+                if (document.querySelector('.chat-wrapper').style.display == "none") {
+                    if (unreadMsgs.length == 0) {
+                        unread.push([newMsg.sender_id, 1])
+                    } else {
+                        unreadMsgs[0][1] += 1
+                    }
                 }
 
                 updateUsers()
@@ -159,6 +161,8 @@ function startWS() {
 window.addEventListener('DOMContentLoaded', async function() {
     await getPosts()
     await getUsers()
+
+    document.querySelector('.chat-wrapper').style.display = "none"
 
     let sess = postData('http://localhost:8000/session')
     sess.then(value => {
