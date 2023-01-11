@@ -24,6 +24,11 @@ func NewMessage(path string, m models.Message) error {
 		return err
 	}
 
+	err = UpdateChatTime(m.Sender_id, m.Receiver_id, db)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -46,9 +51,9 @@ func ConvertRowToMessage(rows *sql.Rows) ([]models.Message, error) {
 	}
 
 	//Returns an error if no rows are provided
-	if len(messages) == 0 {
-		return []models.Message{}, errors.New("no row provided")
-	}
+	// if len(messages) == 0 {
+	// 	return []models.Message{}, errors.New("no row provided")
+	// }
 
 	return messages, nil
 }

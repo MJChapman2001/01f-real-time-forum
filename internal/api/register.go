@@ -50,6 +50,18 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "500 internal server error.", http.StatusInternalServerError)
 		return
 	}
+
+	//Sends a message back if successfully registered
+	var msg = models.Resp{Msg: "Successful registration"}
+	
+	resp, err := json.Marshal(msg)
+	if err != nil {
+		http.Error(w, "500 internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(resp)
 }
 
 //Generates a hash from a given password

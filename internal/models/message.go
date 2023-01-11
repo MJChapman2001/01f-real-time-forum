@@ -6,4 +6,5 @@ type Message struct {
 	Receiver_id int `json:"receiver_id"`
 	Content string `json:"content"`
 	Date string `json:"date"`
+	Msg_type string `json:"msg_type"`
 }

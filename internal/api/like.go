@@ -7,6 +7,7 @@ import (
 
 	"real-time-forum/internal/config"
 	"real-time-forum/internal/database"
+	"real-time-forum/internal/models"
 )
 
 func LikeHandler(w http.ResponseWriter, r *http.Request) {
@@ -59,11 +60,12 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		var users []models.User
+
 		//Finds all users who liked/disliked the post
-		users, err := database.PostLikedBy(config.Path, pid, col)
+		users, err = database.PostLikedBy(config.Path, pid, col)
 		if err != nil {
-			http.Error(w, "500 internal server error", http.StatusInternalServerError)
-			return
+			users = []models.User{}
 		}
 
 		var other string
@@ -88,11 +90,12 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		var otherCol []models.User
+
 		//Finds the users who liked/disliked the post (other column)
-		otherCol, err := database.PostLikedBy(config.Path, pid, other)
+		otherCol, err = database.PostLikedBy(config.Path, pid, other)
 		if err != nil {
-			http.Error(w, "500 internal server error", http.StatusInternalServerError)
-			return
+			otherCol = []models.User{}
 		}
 
 		//Checks whether the user has already liked/disliked the post (other column)
@@ -130,6 +133,26 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
+
+		currPost, err := database.FindPostByParam(config.Path, "id", pid)
+		if err != nil {
+			http.Error(w, "500 internal error", http.StatusInternalServerError)
+			return
+		}
+
+		likes := strconv.Itoa(currPost[0].Likes)
+		dislikes := strconv.Itoa(currPost[0].Dislikes)
+
+		var msg = models.Resp{Msg: likes + "|" + dislikes}
+	
+		resp, err := json.Marshal(msg)
+		if err != nil {
+			http.Error(w, "500 internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write(resp)
 	default:
 		//Prevents other methods from being used
 		http.Error(w, "405 method not allowed.", http.StatusMethodNotAllowed)

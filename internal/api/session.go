@@ -3,53 +3,42 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"real-time-forum/internal/config"
 	"real-time-forum/internal/database"
 	"real-time-forum/internal/models"
 )
 
-func LogoutHandler(w http.ResponseWriter, r *http.Request) {
+func SessionHandler(w http.ResponseWriter, r *http.Request) {
 	//Prevents the endpoint being called by other url paths
-	if r.URL.Path != "/logout" {
+	if r.URL.Path != "/session" {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
 	}
-
+	
 	//Prevents all request types other than POST
 	if r.Method != "POST" {
 		http.Error(w, "405 method not allowed.", http.StatusMethodNotAllowed)
 		return
 	}
 
-	//Opens the database
-	db, err := database.OpenDB(config.Path)
-	if err != nil {
-		http.Error(w, "500 internal server error.", http.StatusInternalServerError)
-		return
-	}
-
-	defer db.Close()
-
-	//Checks for session cookie
 	cookie, err := r.Cookie("session")
 	if err != nil {
 		return
 	}
 
-	//Removes session from the database
-	_, err  = db.Exec(database.RemoveCookie, cookie.Value)
+	foundVal := cookie.Value
+
+	curr, err := database.CurrentUser(config.Path, foundVal)
 	if err != nil {
-		http.Error(w, "500 internal server error.", http.StatusInternalServerError)
 		return
 	}
 
-	//Removes cookie from the browser
-	cookie.MaxAge = -1
-	http.SetCookie(w, cookie)
+	cid := strconv.Itoa(curr.Id)
 
-	//Sends a message back if successfully logged out
-	var msg = models.Resp{Msg: "Goodbye"}
+	//Sends a message back if successfully logged in
+	var msg = models.Resp{Msg: cid+"|"+curr.Username}
 	
 	resp, err := json.Marshal(msg)
 	if err != nil {

@@ -4,12 +4,13 @@ import (
 	"database/sql"
 	"errors"
 	"strconv"
+	"time"
 
 	"real-time-forum/internal/models"
 )
 
 //Attempts to insert a new post into the database
-func NewPost(path string, p models.Post) error {
+func NewPost(path string, p models.Post, u models.User) error {
 	//Opens the database
 	db, err := OpenDB(path)
 	if err != nil {
@@ -18,8 +19,10 @@ func NewPost(path string, p models.Post) error {
 
 	defer db.Close()
 
+	dt := time.Now().Format("01-02-2006 15:04:05")
+
 	//Executes the insert statement
-	_, err = db.Exec(AddPost, p.User_id, p.Category, p.Title, p.Content, p.Date, p.Likes, p.Dislikes)
+	_, err = db.Exec(AddPost, u.Id, p.Category, p.Title, p.Content, dt, p.Likes, p.Dislikes)
 	if err != nil {
 		return err
 	}
@@ -46,9 +49,9 @@ func ConvertRowToPost(rows *sql.Rows) ([]models.Post, error) {
 	}
 
 	//Returns an error if no rows are provided
-	if len(posts) == 0 {
-		return []models.Post{}, errors.New("no row provided")
-	}
+	// if len(posts) == 0 {
+	// 	return []models.Post{}, errors.New("no row provided")
+	// }
 
 	return posts, nil
 }

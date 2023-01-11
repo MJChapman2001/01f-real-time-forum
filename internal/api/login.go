@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/mail"
+	"strconv"
 
 	"real-time-forum/internal/config"
 	"real-time-forum/internal/database"
@@ -93,6 +94,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			HttpOnly: true,
 			Path: "/",
 			MaxAge: config.CookieAge,
+			SameSite: http.SameSiteNoneMode,
+			Secure: true,
 		}
 		http.SetCookie(w, cookie)
 	}
@@ -103,4 +106,18 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "500 internal server error.", http.StatusInternalServerError)
 		return
 	}
+
+	cid := strconv.Itoa(foundUser.Id)
+
+	//Sends a message back if successfully logged in
+	var msg = models.Resp{Msg: cid+"|"+foundUser.Username}
+	
+	resp, err := json.Marshal(msg)
+	if err != nil {
+		http.Error(w, "500 internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(resp)
 }
