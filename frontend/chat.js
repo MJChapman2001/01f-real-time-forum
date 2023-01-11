@@ -20,7 +20,7 @@ function CreateMessages(data, currId) {
         receiver.innerText = content
         var messagedate = document.createElement("div");
         messagedate.className = "chat-time"
-        messagedate.innerText = date
+        messagedate.innerText = date.slice(0, -3)
         appendLog(receiverContainer, receiver, messagedate);
     } )
 }

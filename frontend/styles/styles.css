@@ -10,6 +10,7 @@ body {
     background-color:rgba(241, 239, 234);
     font-family: 'Open Sans', sans-serif;
     color: rgb(37, 37, 37);
+    height: 100vh;
 }
 
 .logout-nav {
@@ -69,8 +70,9 @@ body {
     width: 80%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
+    padding-top: 60px;
 }
 
 .right-panel {
@@ -244,11 +246,10 @@ body {
 .top-panel-nav {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .new-post-btn {
-    height: 30px;
-    width: 30px;
     background-color: transparent;
     border-radius: 20px;
     border: none;
@@ -266,6 +267,10 @@ body {
     font-size: .8rem;
     font-weight: bold;
     color: #121212;
+}
+
+#offline-list {
+    padding-top: 20px;
 }
 
 .user {
@@ -323,7 +328,6 @@ body {
     width: 50%;
     min-width: 400px;
     margin-left: 100px;
-    margin-top: 30px;
     display: none;
     flex-direction: column;
     align-items: flex-end;
@@ -528,30 +532,7 @@ button {
     cursor: pointer;   
 }
 
-.modal {
-    position: absolute;
-    z-index: 1; 
-    /* right: 0;
-    bottom: 0; */
-    /* margin-right: 10%; 
-    margin-bottom: 5%; */
-    width: 400px;
-    height: 70%;
-    background-color: rgba(255, 255, 255, 1);
-
-
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 1);
-    border-radius: 20px;
-    border: black solid 2px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 40px;
-
-    border: black solid 2px;
-    border-radius: 20px;
-    display: none;
-    flex-direction: column;
+#dislike-btn, #like-btn {
+    cursor: pointer; 
 }
+
