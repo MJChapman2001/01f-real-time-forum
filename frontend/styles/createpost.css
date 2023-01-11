@@ -1,7 +1,7 @@
 /* CREATE POST */
 
 .create-post-container {
-    width: 50%;
+    max-width: 450px;
     min-width: 200px;
     display: none;
     flex-direction: column;
@@ -58,6 +58,11 @@ textarea {
     border-radius: 37px;
     background-color: rgb(244, 242, 120);
     border: black solid 2px;
-    box-shadow: 0px 4px 0px #111111;
+    box-shadow: 0px 3px 0px #111111;
     margin-top: 3px;
+}
+
+.create-post-btn:hover {
+    box-shadow: 0px 4px 0px #111111;
+
 }

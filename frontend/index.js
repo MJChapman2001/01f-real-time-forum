@@ -3,7 +3,7 @@ const createPostContainer = document.querySelector(".create-post-container");
 const postContainer = document.querySelector(".post-container");
 const contentWrapper = document.querySelector('.content-wrapper');
 const registerContainer = document.querySelector('.register-container');
-const signinContainer = document.querySelector('.signin-container');
+const signinContainer = document.querySelector('.signin');
 const signupNav = document.querySelector('.signup-nav');
 const logoutNav = document.querySelector('.logout-nav');
 const onlineUsers = document.querySelector('.online-users');
@@ -112,9 +112,6 @@ function startWS() {
         conn.onmessage = async function (evt) {
             newMsg = JSON.parse(evt.data)
             console.log(newMsg)
-
-            // let newDate = newMsg.date.slice(0, -3)
-            // console.log(newDate)
             
             if (newMsg.msg_type == "msg") {
                 var senderContainer = document.createElement("div");
@@ -124,7 +121,7 @@ function startWS() {
                 sender.innerText = newMsg.content
                 var date = document.createElement("div");
                 date.className = "chat-time"
-                date.innerText = newMsg.date
+                date.innerText = (newMsg.date).slice(0, -3)
                 appendLog(senderContainer, sender, date);
 
                 if (newMsg.sender_id == currId) {
@@ -190,8 +187,8 @@ window.addEventListener('DOMContentLoaded', async function() {
 function createPost(postdata) {
 
     document.querySelector('#title').innerHTML = postdata.title
-    document.querySelector('#username').innerHTML = postdata.user_id
-    document.querySelector('#date').innerHTML = postdata.date
+    document.querySelector('#username').innerHTML = allUsers[postdata.user_id-1].username
+    document.querySelector('#date').innerHTML = (postdata.date).slice(0, -3)
     document.querySelector('.category').innerHTML = postdata.category
     document.querySelector('.full-content').innerHTML = postdata.content
     document.getElementById('post-likes').innerHTML = postdata.likes
@@ -223,7 +220,7 @@ function createComments(commentsdata) {
         commentUserWrapper.appendChild(commentUsername)
         var commentDate = document.createElement("div");
         commentDate.className = "comment-date"
-        commentDate.innerHTML = date
+        commentDate.innerHTML = date.slice(0, -3)
         commentUserWrapper.appendChild(commentDate)
         var commentSpan = document.createElement("div");
         commentSpan.innerHTML = content
@@ -253,7 +250,7 @@ function createPosts(postdata) {
         author.className = "author"
         post.append(author)
         var img = document.createElement("img");
-        img.src = "./frontend/assets/profile1.svg"
+        img.src = "./frontend/assets/profile7.svg"
         author.appendChild(img)
         var user = document.createElement("div");
         user.className = "post-username"
@@ -261,7 +258,7 @@ function createPosts(postdata) {
         author.appendChild(user)
         var postdate = document.createElement("div");
         postdate.className = "date"
-        postdate.innerText = date
+        postdate.innerText = date.slice(0, -3)
         author.appendChild(postdate)
         var postcontent = document.createElement("div");
         postcontent.className = "post-body"
@@ -473,7 +470,7 @@ document.querySelector('#signup-link').addEventListener('click', function() {
 })
 
 document.querySelector('#signin-link').addEventListener('click', function() {
-    signinContainer.style.display = "block"
+    signinContainer.style.display = "flex"
     registerContainer.style.display = "none"
 })
 
@@ -486,7 +483,7 @@ signupBtn.addEventListener("click", function() {
         registerContainer.style.display = "block"
     } else {
         signupBtn.innerText = "SIGN UP";
-        signinContainer.style.display = "block"
+        signinContainer.style.display = "flex"
         registerContainer.style.display = "none"
     }
 })
@@ -535,7 +532,7 @@ document.querySelector(".register-btn").addEventListener("click", function(e) {
         alert(msg)
 
         registerContainer.style.display = "none"
-        signinContainer.style.display = "block"  
+        signinContainer.style.display = "flex"  
     })
 })
 

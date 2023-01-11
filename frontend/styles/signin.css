@@ -1,19 +1,20 @@
 
-.signin-container {
+/* .signin-container {
     display: block;
     width: 50%;
     min-width: 200px;
     margin: auto;
     margin-top: 10%;
-}
+} */
 
 .signin {
     width: 50%;
+    max-width: 300px;
     min-width: 200px;
     margin: auto;
     display: flex;
     flex-direction: column;
-   
+    padding-bottom: 100px;
 }
 
 .signin label {
@@ -22,6 +23,7 @@
     color: #000000;
     margin-bottom: 4px;
     margin-left: 8px;
+    margin-top: 8px;
     
 }
 
@@ -62,10 +64,10 @@
     font-weight: 600;
 }
 
-
 .signup-btn {
     background: #111111;
     color: rgba(246, 247, 248, 1);
     border-radius: 30px;
-    padding: 10px 25px;
+    padding: 12px 25px;
+    border: none;
 }
