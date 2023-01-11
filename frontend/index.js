@@ -187,7 +187,7 @@ window.addEventListener('DOMContentLoaded', async function() {
 function createPost(postdata) {
 
     document.querySelector('#title').innerHTML = postdata.title
-    document.querySelector('#username').innerHTML = allUsers[postdata.user_id-1].username
+    document.querySelector('#username').innerHTML = allUsers.filter(u => {return u.id == postdata.user_id})[0].username
     document.querySelector('#date').innerHTML = (postdata.date).slice(0, -3)
     document.querySelector('.category').innerHTML = postdata.category
     document.querySelector('.full-content').innerHTML = postdata.content
