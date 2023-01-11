@@ -467,11 +467,13 @@ document.querySelector('.signin-btn').addEventListener("click", async function()
 document.querySelector('#signup-link').addEventListener('click', function() {
     signinContainer.style.display = "none"
     registerContainer.style.display = "block"
+    signupBtn.innerText = "SIGN IN";
 })
 
 document.querySelector('#signin-link').addEventListener('click', function() {
     signinContainer.style.display = "flex"
     registerContainer.style.display = "none"
+    signupBtn.innerText = "SIGN UP";
 })
 
 const signupBtn = document.querySelector('.signup-btn')
