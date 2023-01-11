@@ -199,8 +199,6 @@ function createPost(postdata) {
 }
 
 function createComments(commentsdata) {
-    console.log(commentsdata, currComments)
-
     commentsContainer.innerHTML = ""
     if (commentsdata == null) {
         return
@@ -325,6 +323,10 @@ function createPosts(postdata) {
 function createUsers(userdata, conn) {
     onlineUsers.innerHTML = ""
     offlineUsers.innerHTML = ""
+
+    if (userdata == null) {
+        return
+    }
 
     userdata.map(({id, username}) => {
         if (id == currId) {
